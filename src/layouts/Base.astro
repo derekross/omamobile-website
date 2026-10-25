@@ -1,0 +1,111 @@
+---
+import "@fontsource-variable/jetbrains-mono";
+import "@fontsource-variable/geist";
+import "../styles/global.css";
+import themes from "../lib/themes.json";
+import { REPO_URL } from "../lib/devices";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const {
+  title,
+  description = "Native Omarchy on your phone: Arch Linux, Hyprland and Omarchy's apps on a mainline Linux kernel, with no Android underneath.",
+} = Astro.props;
+const fullTitle = title ? `${title} · Omarchy Mobile` : "Omarchy Mobile";
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+const nav = [
+  { href: "/devices", label: "Devices" },
+  { href: `${REPO_URL}#quick-start`, label: "Install" },
+  { href: "/news", label: "News" },
+  { href: REPO_URL, label: "GitHub" },
+];
+const themeName = (t: string) => t.split("-").map((w) => w[0].toUpperCase() + w.slice(1)).join(" ");
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={new URL("/screens/home.webp", Astro.site)} />
+    <meta name="theme-color" content="#1a1b26" />
+    <script is:inline>
+      try {
+        const t = localStorage.getItem("theme");
+        if (t) document.documentElement.dataset.theme = t;
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="wrap bar">
+        <a class="wordmark" href="/" aria-label="Omarchy Mobile, home">omarchy<span>mobile</span></a>
+        <nav aria-label="Main">
+          <ul>
+            {nav.map((n) => (
+              <li><a href={n.href} aria-current={path === n.href ? "page" : undefined}>{n.label}</a></li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main id="main">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="wrap foot">
+        <p>
+          Omarchy Mobile is a community project built on <a href="https://omarchy.org">Omarchy</a>.
+          It isn't an official Omarchy or Basecamp product. Code and site are MIT licensed,
+          on <a href={REPO_URL}>GitHub</a>.
+        </p>
+        <label class="theme">
+          <span>Theme</span>
+          <select id="theme-picker">
+            {themes.map((t) => <option value={t}>{themeName(t)}</option>)}
+          </select>
+        </label>
+      </div>
+    </footer>
+    <script is:inline>
+      (() => {
+        const sel = document.getElementById("theme-picker");
+        sel.value = document.documentElement.dataset.theme || "tokyo-night";
+        sel.addEventListener("change", () => {
+          document.documentElement.dataset.theme = sel.value;
+          try { localStorage.setItem("theme", sel.value); } catch {}
+        });
+      })();
+    </script>
+  </body>
+</html>
+
+<style>
+  .site-header { border-bottom: 1px solid var(--border); }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 4rem; flex-wrap: wrap; }
+  .wordmark {
+    font-family: var(--font-mono); font-weight: 700; font-size: 1.125rem; letter-spacing: -0.03em;
+    color: var(--text); text-decoration: none;
+  }
+  .wordmark span { color: var(--accent); margin-left: 0.4ch; font-weight: 500; }
+  nav ul { list-style: none; display: flex; gap: clamp(0.75rem, 3vw, 1.75rem); margin: 0; padding: 0; flex-wrap: wrap; }
+  nav a { font-family: var(--font-mono); font-size: 0.9375rem; color: var(--text-2); text-decoration: none; }
+  nav a:hover, nav a[aria-current="page"] { color: var(--text); text-decoration: underline; text-decoration-color: var(--accent); }
+
+  .site-footer { border-top: 1px solid var(--border); margin-top: 6rem; font-size: 0.875rem; color: var(--muted); }
+  .foot { display: flex; justify-content: space-between; align-items: flex-start; gap: 2rem; padding-block: 2rem; flex-wrap: wrap; }
+  .foot p { max-width: 52ch; margin: 0; }
+  .theme { display: inline-flex; align-items: center; gap: 0.6rem; font-family: var(--font-mono); }
+  .theme select {
+    font: inherit; color: var(--text); background: var(--surface);
+    border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0.35rem 0.5rem;
+  }
+</style>

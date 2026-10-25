@@ -1,0 +1,23 @@
+---
+import Base from "../layouts/Base.astro";
+import { REPO_URL } from "../lib/devices";
+---
+<Base title="News" description="Omarchy Mobile project news, published on Nostr.">
+  <section class="wrap intro">
+    <h1>News</h1>
+    <p>
+      Project updates are published on Nostr as long-form posts, and this page will show them, with an RSS feed made from
+      the same posts. Each post links to its Nostr event, so you can reply and zap from any Nostr app.
+    </p>
+    <p>
+      The first posts are on their way. Until then, the
+      <a href={`${REPO_URL}/commits/main`}>commit history</a> and the
+      <a href={`${REPO_URL}/pulls`}>pull requests</a> show what changed this week.
+    </p>
+  </section>
+</Base>
+
+<style>
+  .intro { padding-block: clamp(3rem, 7vw, 4.5rem) 2rem; }
+  .intro h1 { margin-bottom: 1rem; }
+</style>

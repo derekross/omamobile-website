@@ -1,0 +1,163 @@
+---
+import Base from "../layouts/Base.astro";
+import { devices, reference, inline, STATUS_TEXT, REPO_URL } from "../lib/devices";
+
+const detail = reference.detail ?? [];
+const ports = devices.slice(1);
+---
+<Base>
+  <section class="hero wrap">
+    <div class="pitch">
+      <h1>Omarchy, on your phone.</h1>
+      <p class="lede">
+        Omarchy Mobile runs native Omarchy on phones: Arch Linux ARM, Hyprland and Omarchy's own apps,
+        on a mainline Linux kernel, with no Android underneath.
+      </p>
+      <p class="lede">
+        It runs on the {reference.title} today, and community ports are bringing it to more phones.
+      </p>
+      <div class="actions">
+        <a class="button primary" href={`${REPO_URL}#quick-start`}>Install on a {reference.title}</a>
+        <a class="button" href="/devices">See supported phones</a>
+      </div>
+    </div>
+    <figure class="phone">
+      <img
+        src="/screens/home.webp"
+        width="720"
+        height="1440"
+        alt={`The Omarchy Mobile home screen on a ${reference.title}: a system-information widget showing Omarchy on kernel 7.3, a weather widget, and Chromium, Files, Foot and Omawrite in the dock.`}
+        fetchpriority="high"
+      />
+      <figcaption>A real screenshot, {reference.title}.</figcaption>
+    </figure>
+  </section>
+
+  <section class="wrap block" aria-labelledby="today">
+    <div class="head">
+      <h2 id="today">On the {reference.title} today</h2>
+      <p>Every status is verified on the phone. The details and the notes behind each one are on the <a href={`/devices/${reference.codename}`}>{reference.title} page</a>.</p>
+    </div>
+    <ul class="today">
+      {detail.map((s) => (
+        <li>
+          <span class="name">{s.name}</span>
+          <span class={`status s-${s.cell.status}`}>{STATUS_TEXT[s.cell.status]}</span>
+          {s.cell.detail && <span class="note" set:html={inline(s.cell.detail)} />}
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="wrap block" aria-labelledby="how">
+    <h2 id="how">How it fits together</h2>
+    <dl class="how">
+      <div>
+        <dt>A mainline kernel</dt>
+        <dd>
+          Our own drivers for the display, touch, cameras, audio and the rest, written against upstream Linux and
+          published in <a href="https://github.com/derekross/linux-omarchy-mobile">linux-omarchy-mobile</a>.
+        </dd>
+      </div>
+      <div>
+        <dt>Your way back stays</dt>
+        <dd>
+          Installing writes only the phone's second boot slot and its user data. Stock Android stays on the other
+          slot as your way back.
+        </dd>
+      </div>
+      <div>
+        <dt>Omarchy, updated like Omarchy</dt>
+        <dd>
+          <code>omarchy update</code> works on the phone. The phone's own packages come from a signed repository,
+          next to Omarchy's.
+        </dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="wrap block" aria-labelledby="ports">
+    <div class="head">
+      <h2 id="ports">Bring it to your phone</h2>
+      <p>
+        Community ports are under way on {ports.length} more phones, and the wanted list names more,
+        each with a starting point. The safety model comes first: stock stays on its own slot, and only our slot
+        and the user data are ever written.
+      </p>
+    </div>
+    <ul class="ports">
+      {ports.map((d) => (
+        <li>
+          <a href={`/devices/${d.codename}`}>{d.title}</a>
+          <span class="soc">{d.soc}</span>
+          <span class={`status s-${d.cells["Boot"]?.status ?? "no"}`}>Boot: {STATUS_TEXT[d.cells["Boot"]?.status ?? "no"]}</span>
+        </li>
+      ))}
+    </ul>
+    <div class="actions">
+      <a class="button" href="/devices#wanted">See the wanted list</a>
+      <a class="button" href={`${REPO_URL}/blob/main/CONTRIBUTING.md`}>Read the contributor guide</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: clamp(2rem, 6vw, 5rem);
+    align-items: center;
+    padding-block: clamp(3rem, 8vw, 6rem) clamp(2rem, 5vw, 4rem);
+  }
+  .lede { font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.25rem); color: var(--text-2); max-width: 40ch; }
+  h1 { margin-bottom: 1.5rem; max-width: 12ch; }
+  .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
+
+  .phone { margin: 0; justify-self: center; width: min(100%, 22rem); }
+  .phone img {
+    border-radius: 2.25rem;
+    border: 10px solid var(--bg-deep);
+    outline: 1px solid var(--border-strong);
+    aspect-ratio: 1 / 2;
+    object-fit: cover;
+    width: 100%;
+  }
+  .phone figcaption { font-size: 0.8125rem; color: var(--muted); text-align: center; margin-top: 0.75rem; font-family: var(--font-mono); }
+
+  .block { padding-top: clamp(3rem, 7vw, 5rem); }
+  .head { display: grid; gap: 0.75rem; margin-bottom: 2rem; }
+  .head p { margin: 0; color: var(--text-2); }
+
+  .today {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+    column-gap: 3rem; border-top: 1px solid var(--border);
+  }
+  .today li {
+    display: grid; grid-template-columns: 1fr auto; gap: 0.15rem 1rem; align-items: baseline;
+    padding: 0.8rem 0; border-bottom: 1px solid var(--border);
+  }
+  .today .name { color: var(--text); font-weight: 500; }
+  .today .note { grid-column: 1 / -1; font-size: 0.875rem; color: var(--muted); }
+
+  .how { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: 2rem 3rem; margin: 2rem 0 0; }
+  .how dt { font-family: var(--font-mono); font-weight: 600; color: var(--text); margin-bottom: 0.5rem; }
+  .how dd { margin: 0; }
+
+  .ports { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--border); }
+  .ports li {
+    display: grid; grid-template-columns: minmax(0, 14rem) minmax(0, 1fr) auto; gap: 1rem; align-items: baseline;
+    padding: 0.8rem 0; border-bottom: 1px solid var(--border);
+  }
+  .ports a { font-weight: 500; }
+  .soc { color: var(--muted); font-size: 0.9375rem; }
+
+  @media (max-width: 52rem) {
+    .hero { grid-template-columns: 1fr; }
+    .phone { width: min(80%, 18rem); }
+  }
+  @media (max-width: 34rem) {
+    .ports li { grid-template-columns: 1fr auto; }
+    .soc { grid-column: 1; grid-row: 2; }
+  }
+</style>

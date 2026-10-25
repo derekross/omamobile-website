@@ -1,0 +1,92 @@
+---
+import Base from "../../layouts/Base.astro";
+import { devices, subsystems, wanted, inline, STATUS_TEXT, REPO_URL } from "../../lib/devices";
+---
+<Base title="Devices" description="Which phones run Omarchy Mobile, what works on each one, and the phones we'd like to support next.">
+  <section class="wrap intro">
+    <h1>Devices</h1>
+    <p>
+      What works on each phone, as verified on real hardware. A status only changes here when it has changed in the
+      project's <a href={`${REPO_URL}/blob/main/docs/DEVICES.md`}>device list</a>, with notes behind it.
+    </p>
+    <ul class="legend" aria-label="Status key">
+      {(["works", "partial", "testing", "wip", "no"] as const).map((s) => (
+        <li class={`status s-${s}`}>{STATUS_TEXT[s]}</li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="wrap" aria-label="Status by device">
+    <div class="scroller" tabindex="0" role="region" aria-label="Status table, scrolls sideways">
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th scope="col">Part</th>
+            {devices.map((d) => (
+              <th scope="col"><a href={`/devices/${d.codename}`}>{d.title}</a><span>{d.soc}</span></th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {subsystems.map((s) => (
+            <tr>
+              <th scope="row">{s}</th>
+              {devices.map((d) => {
+                const c = d.cells[s];
+                return (
+                  <td>
+                    <span class={`status s-${c.status}`}>{STATUS_TEXT[c.status]}</span>
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="wrap wanted" aria-labelledby="wanted">
+    <h2 id="wanted">Wanted</h2>
+    <p>
+      Phones we'd like to support, with the closest starting point for each. Open an issue to say you're working on
+      one, so efforts don't overlap, and read the
+      <a href={`${REPO_URL}/blob/main/CONTRIBUTING.md`}>contributor guide</a> first: it starts with the safety model.
+    </p>
+    <ul>
+      {wanted.map((w) => (
+        <li>
+          <div class="who">
+            <span class="title">{w.title}</span>
+            <span class="soc">{w.codename}, {w.soc}</span>
+          </div>
+          <p set:html={inline(w.start)} />
+        </li>
+      ))}
+    </ul>
+  </section>
+</Base>
+
+<style>
+  .intro { padding-block: clamp(3rem, 7vw, 4.5rem) 2rem; }
+  .intro h1 { margin-bottom: 1rem; }
+  .legend { list-style: none; padding: 0; margin: 1.5rem 0 0; display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; }
+
+  .scroller { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); }
+  .matrix { border-collapse: collapse; width: 100%; font-size: 0.9375rem; }
+  .matrix th, .matrix td { padding: 0.6rem 1rem; border-bottom: 1px solid var(--border); text-align: left; white-space: nowrap; }
+  .matrix thead th { position: sticky; top: 0; background: var(--surface); vertical-align: bottom; font-family: var(--font-mono); font-weight: 600; }
+  .matrix thead th span { display: block; font-weight: 400; font-size: 0.8125rem; color: var(--muted); }
+  .matrix tbody th { font-weight: 500; color: var(--text); position: sticky; left: 0; background: var(--bg); }
+  .matrix tbody tr:last-child > * { border-bottom: 0; }
+
+  .wanted { padding-top: clamp(3rem, 7vw, 5rem); }
+  .wanted h2 { margin-bottom: 1rem; }
+  .wanted ul { list-style: none; padding: 0; margin: 2rem 0 0; border-top: 1px solid var(--border); }
+  .wanted li { display: grid; grid-template-columns: minmax(12rem, 18rem) 1fr; gap: 0.5rem 2rem; padding: 1rem 0; border-bottom: 1px solid var(--border); }
+  .wanted li p { margin: 0; font-size: 0.9375rem; }
+  .who { display: grid; }
+  .title { color: var(--text); font-weight: 500; }
+  .soc { color: var(--muted); font-size: 0.875rem; }
+  @media (max-width: 40rem) { .wanted li { grid-template-columns: 1fr; } }
+</style>

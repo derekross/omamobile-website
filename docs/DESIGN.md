@@ -10,6 +10,10 @@ Status (2026-10-25): decided, nothing built. Each section gives the decision, th
 
 ## Look
 
+- **Omarchy's themes, switchable.** `scripts/gen-themes.py` turns twelve of Omarchy's theme palettes (`colors.toml`) into the site's colour tokens, with contrast raised where a palette's text would be too faint. Tokyo Night is the default, and the footer has a theme picker, as on omarchy.org. The accent is each theme's own accent: blue on Tokyo Night, as on the phone, rather than omarchy.org's green, so the two sites look related, not the same.
+- **Omarchy's type:** JetBrains Mono for headings, navigation and status; Geist for body text (both OFL, self-hosted through Fontsource).
+- **One bold element:** a real screenshot of the phone in the hero. Everything else is quiet: ruled lists, not cards; left-aligned.
+- **Status colours mean status:** green works, yellow partial or testing, violet in progress, a hollow dot not yet.
 - Omarchy's look: its themes, fonts and logo files, with attribution. Omarchy is MIT, so reusing its code and assets is covered. MIT grants no trademark rights, so the site says "Omarchy Mobile is a community project built on Omarchy", links back, and never presents itself as an official Basecamp product.
 - Real screenshots and photos from the phones, each scrubbed for identifiers: SSIDs, Bluetooth device names, notification contents, account names and serial numbers.
 

@@ -1,0 +1,64 @@
+---
+import Base from "../../layouts/Base.astro";
+import { devices, subsystems, inline, STATUS_TEXT, REPO_URL, type Device } from "../../lib/devices";
+
+export function getStaticPaths() {
+  return devices.map((d) => ({ params: { codename: d.codename }, props: { device: d } }));
+}
+const { device } = Astro.props as { device: Device };
+const rows = device.detail ?? subsystems.map((s) => ({ name: s, cell: device.cells[s], notes: "", plan: "" }));
+const counts = rows.reduce<Record<string, number>>((n, r) => ((n[r.cell.status] = (n[r.cell.status] ?? 0) + 1), n), {});
+---
+<Base title={device.title} description={`What works on the ${device.title} (${device.codename}) with Omarchy Mobile.`}>
+  <section class="wrap intro">
+    <p class="crumb"><a href="/devices">Devices</a></p>
+    <h1>{device.title}</h1>
+    <p class="meta">{device.codename}, {device.soc}</p>
+    <p>
+      {`${counts.works ?? 0} of ${rows.length} parts work, verified on the phone. `}
+      {device.detail
+        ? "Each row links to the plan with the notes behind it."
+        : "This is a community port in progress; its notes are linked from the project's device list."}
+    </p>
+  </section>
+
+  <section class="wrap">
+    <ul class="parts">
+      {rows.map((r) => (
+        <li>
+          <h2>{r.name}</h2>
+          <span class={`status s-${r.cell.status}`}>{STATUS_TEXT[r.cell.status]}</span>
+          {r.cell.detail && <p class="detail" set:html={inline(r.cell.detail)} />}
+          {r.notes && <p class="notes" set:html={inline(r.notes)} />}
+          {r.plan && <p class="plan">Plan: <span set:html={inline(r.plan)} /></p>}
+        </li>
+      ))}
+    </ul>
+    <p class="source">
+      Source: <a href={`${REPO_URL}/blob/main/docs/DEVICES.md`}>docs/DEVICES.md</a> in the Omarchy Mobile repository.
+    </p>
+  </section>
+</Base>
+
+<style>
+  .intro { padding-block: clamp(3rem, 7vw, 4.5rem) 2rem; }
+  .crumb { font-family: var(--font-mono); font-size: 0.875rem; margin-bottom: 1rem; }
+  .meta { font-family: var(--font-mono); color: var(--muted); margin: 0.5rem 0 1.5rem; }
+
+  .parts { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--border); }
+  .parts li {
+    display: grid; grid-template-columns: minmax(9rem, 12rem) 9rem 1fr; gap: 0.25rem 1.5rem;
+    padding: 1.1rem 0; border-bottom: 1px solid var(--border); align-items: baseline;
+  }
+  .parts h2 { font-size: 1rem; letter-spacing: -0.01em; }
+  .detail { grid-column: 3; margin: 0; color: var(--text); font-size: 0.9375rem; }
+  .notes { grid-column: 3; margin: 0.25rem 0 0; font-size: 0.875rem; color: var(--muted); }
+  .detail + .notes { margin-top: 0.4rem; }
+  .plan { grid-column: 3; margin: 0.4rem 0 0; font-size: 0.8125rem; font-family: var(--font-mono); color: var(--muted); }
+  .source { margin-top: 2rem; font-size: 0.875rem; color: var(--muted); }
+
+  @media (max-width: 44rem) {
+    .parts li { grid-template-columns: 1fr auto; }
+    .detail, .notes, .plan { grid-column: 1 / -1; }
+  }
+</style>

@@ -12,7 +12,15 @@ The site will have:
 
 Later it will also have downloads and a web installer.
 
-Nothing is built or deployed yet. [docs/DESIGN.md](docs/DESIGN.md) records the decisions so far.
+The first pages are built: the landing page, the device list and a page per device, and a news page waiting for its first Nostr posts. Nothing is deployed.
+
+```sh
+npm ci
+npm run dev        # http://localhost:4321
+npm run build      # static site in dist/
+```
+
+The build reads `docs/DEVICES.md` from a checkout of the main repository, `../omarchy-mobile` by default (set `OMAMOBILE_REPO` to change it). [docs/DESIGN.md](docs/DESIGN.md) records the decisions so far.
 
 ## Rules for this repository
 
