@@ -34,7 +34,13 @@ const themeName = (t: string) => t.split("-").map((w) => w[0].toUpperCase() + w.
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content={new URL("/screens/home.webp", Astro.site)} />
+    <meta property="og:image" content={new URL("/og.png", Astro.site)} />
+    <meta property="og:image:width" content="1500" />
+    <meta property="og:image:height" content="500" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/favicon-48.png" type="image/png" sizes="48x48" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="theme-color" content="#1a1b26" />
     <script is:inline>
       try {
@@ -47,7 +53,7 @@ const themeName = (t: string) => t.split("-").map((w) => w[0].toUpperCase() + w.
     <a class="skip" href="#main">Skip to content</a>
     <header class="site-header">
       <div class="wrap bar">
-        <a class="wordmark" href="/" aria-label="Omarchy Mobile, home">omarchy<span>mobile</span></a>
+        <a class="wordmark" href="/" aria-label="Omarchy Mobile, home"><span class="mark" aria-hidden="true">om</span>omarchy<span class="sub">mobile</span></a>
         <nav aria-label="Main">
           <ul>
             {nav.map((n) => (
@@ -95,7 +101,19 @@ const themeName = (t: string) => t.split("-").map((w) => w[0].toUpperCase() + w.
     font-family: var(--font-mono); font-weight: 700; font-size: 1.125rem; letter-spacing: -0.03em;
     color: var(--text); text-decoration: none;
   }
-  .wordmark span { color: var(--accent); margin-left: 0.4ch; font-weight: 500; }
+  .wordmark { display: inline-flex; align-items: center; }
+  .wordmark .sub { color: var(--accent); margin-left: 0.4ch; font-weight: 500; }
+  /* The logo: a phone outline around "om", as on the project's Nostr profile. */
+  .mark {
+    display: inline-grid; place-items: center; position: relative;
+    width: 1.6rem; height: 2.6rem; margin-right: 0.7rem;
+    border: 3px solid var(--accent); border-radius: 0.4rem;
+    font-size: 0.72rem; font-weight: 800; letter-spacing: -0.06em; color: var(--text);
+  }
+  .mark::before {
+    content: ""; position: absolute; top: 0.17rem; left: 50%; transform: translateX(-50%);
+    width: 0.24rem; height: 0.08rem; border-radius: 1px; background: var(--accent);
+  }
   nav ul { list-style: none; display: flex; gap: clamp(0.75rem, 3vw, 1.75rem); margin: 0; padding: 0; flex-wrap: wrap; }
   nav a { font-family: var(--font-mono); font-size: 0.9375rem; color: var(--text-2); text-decoration: none; }
   nav a:hover, nav a[aria-current="page"] { color: var(--text); text-decoration: underline; text-decoration-color: var(--accent); }
