@@ -1,0 +1,7 @@
+# Private research notes (comparisons with other projects; never public copy)
+/notes/
+node_modules/
+dist/
+.astro/
+.env
+.env.*
