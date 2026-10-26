@@ -5,7 +5,7 @@
   "scripts": {
     "news": "node scripts/fetch-news.mjs",
     "dev": "astro dev",
-    "prebuild": "node scripts/fetch-news.mjs",
+    "prebuild": "node scripts/fetch-news.mjs || echo 'news: fetch failed; building from the cache'",
     "build": "astro build",
     "preview": "astro preview"
   },

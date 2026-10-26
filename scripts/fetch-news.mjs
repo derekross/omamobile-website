@@ -5,7 +5,6 @@
 // the project's key. NEWS_OFFLINE=1 skips the fetch.
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { SimplePool, useWebSocketImplementation } from "nostr-tools/pool";
 import { verifyEvent } from "nostr-tools/pure";
 import * as nip19 from "nostr-tools/nip19";
 
@@ -30,15 +29,40 @@ for (const f of readdirSync(DIR).filter((f) => f.endsWith(".json"))) {
   cached.set(dTag(e), e);
 }
 
-useWebSocketImplementation(WebSocket);
-const pool = new SimplePool();
-let events = [];
-try {
-  events = await pool.querySync(RELAYS, { kinds: [30023], authors: [PUBKEY] }, { maxWait: 8000 });
-} catch (err) {
-  console.warn(`news: relays failed (${err.message}); keeping the cache`);
+// One REQ per relay, closed at EOSE or after a timeout. A relay that fails
+// to connect just contributes nothing.
+function query(url, filter, ms = 8000) {
+  return new Promise((done) => {
+    const got = [];
+    let ws;
+    let finished = false;
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      try { ws?.close(); } catch {}
+      done(got);
+    };
+    const timer = setTimeout(finish, ms);
+    try {
+      ws = new WebSocket(url);
+    } catch {
+      return finish();
+    }
+    ws.onopen = () => ws.send(JSON.stringify(["REQ", "news", filter]));
+    ws.onmessage = (m) => {
+      let msg;
+      try { msg = JSON.parse(m.data); } catch { return; }
+      if (msg[0] === "EVENT" && msg[1] === "news") got.push(msg[2]);
+      if (msg[0] === "EOSE" || msg[0] === "CLOSED") finish();
+    };
+    ws.onerror = () => finish();
+    ws.onclose = () => finish();
+  });
 }
-pool.close(RELAYS);
+
+const results = await Promise.all(RELAYS.map((r) => query(r, { kinds: [30023], authors: [PUBKEY] })));
+const events = results.flat();
 
 let changed = 0;
 for (const e of events) {
