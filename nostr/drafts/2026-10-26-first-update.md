@@ -19,7 +19,7 @@ The Pixel 7 Pro is the reference phone, and it is what we use every day while we
 - the battery, charging and haptics;
 - the torch, the sensors with auto-rotate, GPS and NFC;
 - fingerprint unlock, which is opt-in;
-- all four cameras, in our own camera app, [omacam](https://github.com/derekross/omacam). It has Night mode and HDR, which merge a burst of raw frames on the phone. The telephoto can't focus yet.
+- all four cameras, in our own camera app, [omacam](https://github.com/derekross/omacam). It has Night mode and HDR, which merge a burst of raw frames on the phone. The telephoto is fixed-focus for now: sharp on distant subjects, soft up close.
 
 The speakers and microphones work but still sound quiet and thin, and that's being tuned.
 
