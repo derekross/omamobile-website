@@ -1,12 +1,12 @@
 # omamobile.org: design decisions
 
-Status (2026-10-26): the landing page, devices and news are built; nothing is deployed. Each section gives the decision, then the reason.
+Status (2026-10-26): the landing page, devices and news are live at omamobile.org. Each section gives the decision, then the reason.
 
 ## Stack
 
 - **Astro, static output.** Omarchy's own site uses Astro, and it lets the content collections load the main repository's Markdown directly. The site ships no client JavaScript except the theme switcher and, later, the installer.
 - **Content comes from the main repository.** The build reads a pinned checkout of `derekross/omarchy-mobile`: `docs/DEVICES.md` becomes validated device data, and the docs pages come from its Markdown. Every status on the site therefore matches the repository, and a status the data contradicts fails the build.
-- **Built and tested locally first.** The VPS (nginx, Let's Encrypt) comes later.
+- **Hosting:** nginx with Let's Encrypt on the maintainer's VPS. GitHub Actions builds and rsyncs `dist/` on every push to `main` and every six hours.
 
 ## Look
 
@@ -22,7 +22,7 @@ Status (2026-10-26): the landing page, devices and news are built; nothing is de
 - **Nostr-native.** News, project updates and blog posts are NIP-23 long-form events from the project's own key. `npm run build` first runs `scripts/fetch-news.mjs`, which fetches them from relays, checks each signature and author, and caches them in `nostr/events/`; the site builds from that cache only, so a down relay breaks nothing (`NEWS_OFFLINE=1` skips the fetch). The RSS/Atom feed is generated from the same events. Each post links to its event (`naddr`) for replies and zaps.
 - Contributors are named by their GitHub handle.
 - The project's key signs ([nostr/npub.txt](../nostr/npub.txt)). Posts made before the account existed were republished from it with their original dates.
-- **Staying current.** Device status and news are read at build time, so a rebuild picks up both. Once the site is deployed, a scheduled rebuild (and one on every push to the main repository's `docs/DEVICES.md`) keeps it current with no manual step.
+- **Staying current.** Device status and news are read at build time, so a rebuild picks up both. The deploy workflow rebuilds every six hours, so both reach the site with no manual step.
 
 ## Copy
 

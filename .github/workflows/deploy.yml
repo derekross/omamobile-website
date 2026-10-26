@@ -1,0 +1,62 @@
+name: Deploy to omamobile.org
+
+# A push deploys at once. The schedule rebuilds every six hours, so new
+# Nostr posts and DEVICES.md changes in the main repository reach the site
+# without anyone touching this one.
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "23 */6 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the site
+        uses: actions/checkout@v4
+
+      # The device pages are built from the main repository's DEVICES.md.
+      - name: Checkout the main repository's docs
+        uses: actions/checkout@v4
+        with:
+          repository: derekross/omarchy-mobile
+          path: omarchy-mobile
+          sparse-checkout: docs
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Fetches the project's Nostr posts (signature-checked) before building;
+      # if every relay is down, the committed cache in nostr/events/ is used.
+      - name: Build
+        run: npm run build
+        env:
+          OMAMOBILE_REPO: omarchy-mobile
+
+      # Load-bearing switches, as on the server's other sites: --delete mirrors
+      # dist/; no -p and --omit-dir-times, because the deploy user writes inside
+      # the root:deployers webroot without owning it (otherwise rsync exits 23);
+      # .well-known/ is excluded so ACME and NIP-05 files survive --delete.
+      - name: Deploy to nostr01
+        uses: burnett01/rsync-deployments@v9
+        with:
+          switches: -rlt --omit-dir-times --delete --exclude='.well-known/'
+          path: dist/
+          remote_path: ${{ secrets.PROD_PATH }}
+          remote_host: ${{ secrets.PROD_HOST }}
+          remote_port: ${{ secrets.PROD_PORT }}
+          remote_user: ${{ secrets.PROD_USER }}
+          remote_key: ${{ secrets.PROD_SSH_KEY }}

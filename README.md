@@ -12,7 +12,7 @@ The site will have:
 
 Later it will also have downloads and a web installer.
 
-The first pages are built: the landing page, the device list and a page per device, and the news, built from the project's Nostr posts. Nothing is deployed.
+The first pages are built: the landing page, the device list and a page per device, and the news, built from the project's Nostr posts. It is live at [omamobile.org](https://omamobile.org): a push to `main` deploys it, and a rebuild every six hours picks up new posts and device changes (`.github/workflows/deploy.yml`).
 
 ```sh
 npm ci
