@@ -3,13 +3,16 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "news": "node scripts/fetch-news.mjs",
     "dev": "astro dev",
+    "prebuild": "node scripts/fetch-news.mjs",
     "build": "astro build",
     "preview": "astro preview"
   },
   "dependencies": {
     "@fontsource-variable/geist": "5.2.8",
     "@fontsource-variable/jetbrains-mono": "5.2.8",
-    "astro": "7.3.8"
+    "astro": "7.3.8",
+    "nostr-tools": "2.25.2"
   }
 }

@@ -52,14 +52,13 @@ const shots = [
         alt={`The Omarchy Mobile home screen on a ${reference.title}: a system-information widget showing Omarchy on kernel 7.3, a weather widget, and Chromium, Files, Foot and Omawrite in the dock.`}
         fetchpriority="high"
       />
-      <figcaption>A real screenshot, {reference.title}.</figcaption>
     </figure>
   </section>
 
   <section class="wrap block" aria-labelledby="today">
     <div class="head">
       <h2 id="today">On the {reference.title} today</h2>
-      <p>Every status is verified on the phone. The details and the notes behind each one are on the <a href={`/devices/${reference.codename}`}>{reference.title} page</a>.</p>
+      <p>The notes behind each status are on the <a href={`/devices/${reference.codename}`}>{reference.title} page</a>.</p>
     </div>
     <ul class="today">
       {detail.map((s) => (
@@ -75,7 +74,6 @@ const shots = [
   <section class="wrap block" aria-labelledby="look">
     <div class="head">
       <h2 id="look">A look around</h2>
-      <p>Screenshots from a {reference.title} running Omarchy Mobile.</p>
     </div>
     <ul class="shots">
       {shots.map((s) => (
@@ -162,7 +160,6 @@ const shots = [
     object-fit: cover;
     width: 100%;
   }
-  .phone figcaption { font-size: 0.8125rem; color: var(--muted); text-align: center; margin-top: 0.75rem; font-family: var(--font-mono); }
 
   .block { padding-top: clamp(3rem, 7vw, 5rem); }
   .head { display: grid; gap: 0.75rem; margin-bottom: 2rem; }

@@ -15,7 +15,7 @@ const counts = rows.reduce<Record<string, number>>((n, r) => ((n[r.cell.status] 
     <h1>{device.title}</h1>
     <p class="meta">{device.codename}, {device.soc}</p>
     <p>
-      {`${counts.works ?? 0} of ${rows.length} parts work, verified on the phone. `}
+      {`${counts.works ?? 0} of ${rows.length} parts work. `}
       {device.detail
         ? "Each row links to the plan with the notes behind it."
         : "This is a community port in progress; its notes are linked from the project's device list."}

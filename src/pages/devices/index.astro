@@ -6,8 +6,7 @@ import { devices, subsystems, wanted, inline, STATUS_TEXT, REPO_URL } from "../.
   <section class="wrap intro">
     <h1>Devices</h1>
     <p>
-      What works on each phone, as verified on real hardware. A status only changes here when it has changed in the
-      project's <a href={`${REPO_URL}/blob/main/docs/DEVICES.md`}>device list</a>, with notes behind it.
+      What works on each phone, from the project's <a href={`${REPO_URL}/blob/main/docs/DEVICES.md`}>device list</a>.
     </p>
     <ul class="legend" aria-label="Status key">
       {(["works", "partial", "testing", "wip", "no"] as const).map((s) => (

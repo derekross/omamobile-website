@@ -8,7 +8,7 @@ t: [omarchy, omarchymobile, linux, mobilelinux, arch, hyprland, pixel]
 status: published 2026-10-26 (nostr/events/2026-10-26-first-update.json)
 ---
 
-Omarchy Mobile runs native Omarchy on phones: Arch Linux ARM, Hyprland and Omarchy's own apps, on a mainline Linux kernel, with no Android underneath. This account will post the project's updates. This first one says where things stand.
+Omarchy Mobile runs native Omarchy on phones: Arch Linux ARM, Hyprland and Omarchy's own apps, on a mainline Linux kernel, with no Android underneath. This account will post the project's updates. This one says where things stand.
 
 ## On the Pixel 7 Pro today
 

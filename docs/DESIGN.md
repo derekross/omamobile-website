@@ -1,6 +1,6 @@
 # omamobile.org: design decisions
 
-Status (2026-10-25): decided, nothing built. Each section gives the decision, then the reason.
+Status (2026-10-26): the landing page, devices and news are built; nothing is deployed. Each section gives the decision, then the reason.
 
 ## Stack
 
@@ -19,9 +19,10 @@ Status (2026-10-25): decided, nothing built. Each section gives the decision, th
 
 ## News
 
-- **Nostr-native.** News, project updates and blog posts are NIP-23 long-form events. The build fetches them from relays and caches them in the repository, so builds are reproducible and a down relay breaks nothing. The RSS/Atom feed is generated from the same events. Each post links to its event (`naddr`) for replies and zaps.
+- **Nostr-native.** News, project updates and blog posts are NIP-23 long-form events from the project's own key. `npm run build` first runs `scripts/fetch-news.mjs`, which fetches them from relays, checks each signature and author, and caches them in `nostr/events/`; the site builds from that cache only, so a down relay breaks nothing (`NEWS_OFFLINE=1` skips the fetch). The RSS/Atom feed is generated from the same events. Each post links to its event (`naddr`) for replies and zaps.
 - Contributors are named by their GitHub handle.
-- Open: whether a project key or the maintainer's key signs.
+- The project's key signs ([nostr/npub.txt](../nostr/npub.txt)). Posts made before the account existed were republished from it with their original dates.
+- **Staying current.** Device status and news are read at build time, so a rebuild picks up both. Once the site is deployed, a scheduled rebuild (and one on every push to the main repository's `docs/DEVICES.md`) keeps it current with no manual step.
 
 ## Copy
 

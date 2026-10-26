@@ -1,0 +1,34 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("news")).sort((a, b) => +b.data.published - +a.data.published);
+const day = (d: Date) => d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
+---
+<Base title="News" description="Omarchy Mobile project news.">
+  <section class="wrap intro">
+    <h1>News</h1>
+    <p>Updates from the project, also posted on <a href="https://njump.me/npub1epdgm26q2wx0ee37q8u692z8w2ngwqepd9fvxy04uml8nz7sx7fs9hkynf">Nostr</a>.</p>
+  </section>
+  <section class="wrap">
+    <ul class="posts">
+      {posts.map((p) => (
+        <li>
+          <time datetime={p.data.published.toISOString()}>{day(p.data.published)}</time>
+          <h2><a href={`/news/${p.id}`}>{p.data.title}</a></h2>
+          {p.data.summary && <p>{p.data.summary}</p>}
+        </li>
+      ))}
+    </ul>
+  </section>
+</Base>
+
+<style>
+  .intro { padding-block: clamp(3rem, 7vw, 4.5rem) 2rem; }
+  .intro h1 { margin-bottom: 1rem; }
+  .posts { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--border); }
+  .posts li { padding: 1.5rem 0; border-bottom: 1px solid var(--border); }
+  .posts time { font-family: var(--font-mono); font-size: 0.875rem; color: var(--muted); }
+  .posts h2 { font-size: 1.375rem; margin: 0.35rem 0 0.5rem; }
+  .posts p { margin: 0; color: var(--text-2); }
+</style>
