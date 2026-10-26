@@ -4,6 +4,29 @@ import { devices, reference, inline, STATUS_TEXT, REPO_URL } from "../lib/device
 
 const detail = reference.detail ?? [];
 const ports = devices.slice(1);
+
+const shots = [
+  {
+    file: "home-full.webp",
+    caption: "The home screen, with widgets and a dock.",
+    alt: "The home screen: a system-information widget, a weather widget, a wallpaper of purple hills, four apps in the dock and a search bar.",
+  },
+  {
+    file: "quick-settings.webp",
+    caption: "Quick settings, with brightness and volume.",
+    alt: "Quick settings: tiles for Wi-Fi, Bluetooth, Do not disturb, the torch, mobile data, rotation lock, airplane mode and location, with brightness and volume sliders.",
+  },
+  {
+    file: "apps.webp",
+    caption: "Every app, with search and the on-screen keyboard.",
+    alt: "The app list in a four-column grid, with the search bar and the on-screen keyboard open below it.",
+  },
+  {
+    file: "terminal.webp",
+    caption: "A terminal running an AI agent you pick at first login.",
+    alt: "A terminal over the home screen running Claude Code, waiting for a prompt.",
+  },
+];
 ---
 <Base>
   <section class="hero wrap">
@@ -44,6 +67,23 @@ const ports = devices.slice(1);
           <span class="name">{s.name}</span>
           <span class={`status s-${s.cell.status}`}>{STATUS_TEXT[s.cell.status]}</span>
           {s.cell.detail && <span class="note" set:html={inline(s.cell.detail)} />}
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="wrap block" aria-labelledby="look">
+    <div class="head">
+      <h2 id="look">A look around</h2>
+      <p>Screenshots from a {reference.title} running Omarchy Mobile.</p>
+    </div>
+    <ul class="shots">
+      {shots.map((s) => (
+        <li>
+          <figure>
+            <img src={`/screens/${s.file}`} width="720" height="1560" alt={s.alt} loading="lazy" decoding="async" />
+            <figcaption>{s.caption}</figcaption>
+          </figure>
         </li>
       ))}
     </ul>
@@ -140,6 +180,17 @@ const ports = devices.slice(1);
   .today .name { color: var(--text); font-weight: 500; }
   .today .note { grid-column: 1 / -1; font-size: 0.875rem; color: var(--muted); }
 
+  .shots {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(1rem, 3vw, 2rem);
+  }
+  .shots figure { margin: 0; }
+  .shots img {
+    width: 100%; height: auto; border-radius: 1.25rem;
+    border: 6px solid var(--bg-deep); outline: 1px solid var(--border-strong);
+  }
+  .shots figcaption { font-size: 0.875rem; color: var(--muted); margin-top: 0.75rem; }
+
   .how { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: 2rem 3rem; margin: 2rem 0 0; }
   .how dt { font-family: var(--font-mono); font-weight: 600; color: var(--text); margin-bottom: 0.5rem; }
   .how dd { margin: 0; }
@@ -155,6 +206,7 @@ const ports = devices.slice(1);
   @media (max-width: 52rem) {
     .hero { grid-template-columns: 1fr; }
     .phone { width: min(80%, 18rem); }
+    .shots { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
   @media (max-width: 34rem) {
     .ports li { grid-template-columns: 1fr auto; }
