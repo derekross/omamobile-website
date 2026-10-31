@@ -163,11 +163,9 @@ export function countStatus(d: Device, ...status: Status[]): number {
   return parts(d).filter((p) => status.includes(p.cell.status)).length;
 }
 
-// The best-supported phones: Boot works and at least half of their parts work,
-// most working parts first. Every other device is a port in progress, the
-// furthest along (most parts past "no") first.
-const isFeatured = (d: Device) => d.cells["Boot"]?.status === "works" && countStatus(d, "works") * 2 >= parts(d).length;
-export const featured = devices.filter(isFeatured).sort((a, b) => countStatus(b, "works") - countStatus(a, "works"));
-export const inProgress = devices
-  .filter((d) => !isFeatured(d))
-  .sort((a, b) => parts(b).length - countStatus(b, "no") - (parts(a).length - countStatus(a, "no")));
+// Every device, furthest along first: a working part counts 3, a part in
+// testing or partial 2, one in progress (WIP, built, boots) 1. Ties keep the
+// order of DEVICES.md.
+const WEIGHT: Record<Status, number> = { works: 3, testing: 2, partial: 2, wip: 1, built: 1, boots: 1, no: 0, none: 0 };
+export const progress = (d: Device) => parts(d).reduce((n, p) => n + WEIGHT[p.cell.status], 0);
+export const byProgress = [...devices].sort((a, b) => progress(b) - progress(a));

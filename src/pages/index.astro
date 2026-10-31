@@ -1,34 +1,28 @@
 ---
 import Base from "../layouts/Base.astro";
-import { featured, inProgress, parts, countStatus, STATUS_TEXT, REPO_URL, type Device } from "../lib/devices";
+import { byProgress, parts, countStatus, STATUS_TEXT, REPO_URL } from "../lib/devices";
 
-// "Pixel 7 Pro and Pixel 6 Pro", "A, B and C"
-const names = (ds: Device[]) => {
-  const t = ds.map((d) => `the ${d.title}`);
-  return t.length < 2 ? (t[0] ?? "") : `${t.slice(0, -1).join(", ")} and ${t.at(-1)}`;
-};
-const strip = (d: Device) => parts(d).map((p) => ({ name: p.name, status: p.cell.status }));
+// Screenshots from one session with made-up demo data. The Wi-Fi network
+// name, phone numbers, a conference badge and an album cover are blurred
+// in the files.
 const shots = [
-  {
-    file: "home-full.webp",
-    caption: "The home screen, with widgets and a dock.",
-    alt: "The home screen: a system-information widget, a weather widget, a wallpaper of purple hills, four apps in the dock and a search bar.",
-  },
-  {
-    file: "quick-settings.webp",
-    caption: "Quick settings, with brightness and volume.",
-    alt: "Quick settings: tiles for Wi-Fi, Bluetooth, Do not disturb, the torch, mobile data, rotation lock, airplane mode and location, with brightness and volume sliders.",
-  },
-  {
-    file: "apps.webp",
-    caption: "Every app, with search and the on-screen keyboard.",
-    alt: "The app list in a four-column grid, with the search bar and the on-screen keyboard open below it.",
-  },
-  {
-    file: "terminal.webp",
-    caption: "A terminal running an AI agent you pick at first login.",
-    alt: "A terminal over the home screen running Claude Code, waiting for a prompt.",
-  },
+  { file: "01-lock-glance", caption: "The lock screen at a glance.", alt: "The lock screen: the time, the date and the weather, three notifications and a fingerprint prompt." },
+  { file: "02-pin", caption: "The PIN pad.", alt: "The PIN pad over the wallpaper, with a fingerprint prompt below it." },
+  { file: "03-shade", caption: "The notification shade and quick settings.", alt: "Quick settings for Wi-Fi, Bluetooth, Do not disturb and the torch, a brightness slider, and five notifications." },
+  { file: "04-home-1", caption: "The home screen.", alt: "The home screen with a system-information widget, a weather widget, a dock of four apps and a search bar." },
+  { file: "05-home-2", caption: "A second home screen.", alt: "A home screen with a media player, a pixel-art animation and a pixel-art pet widget." },
+  { file: "07-widgets", caption: "Adding widgets, or making one with AI.", alt: "The Add a widget sheet: your own widgets, built-in ones and a button to create a widget with AI." },
+  { file: "08-messages", caption: "Messages.", alt: "The messages app with a list of six conversations." },
+  { file: "09-thread", caption: "A message thread.", alt: "A message thread with the on-screen keyboard open." },
+  { file: "10-phone", caption: "The phone app's keypad.", alt: "The phone app's keypad." },
+  { file: "11-recents", caption: "Recent calls.", alt: "A list of recent calls: missed, incoming and outgoing." },
+  { file: "12-contacts", caption: "Contacts.", alt: "An alphabetical contact list with a search bar." },
+  { file: "13-camera", caption: "The camera.", alt: "The camera app framing a shadow box of pins, with zoom steps and Night, Photo, Video and Pro modes." },
+  { file: "14-theme-picker", caption: "The theme picker.", alt: "The theme picker over the home screen, showing the Retro 82 theme." },
+  { file: "15-theme", caption: "A theme applied to the whole phone.", alt: "The home screen in a new theme, with new colours and wallpaper." },
+  { file: "16-switcher", caption: "The app switcher.", alt: "The app switcher with a message thread in front and other apps to either side." },
+  { file: "17-app-drawer", caption: "Every app, with search.", alt: "The app drawer in a four-column grid, with the search bar and the on-screen keyboard." },
+  { file: "18-ai-agent", caption: "The AI agent you pick at first login.", alt: "A terminal running an AI coding agent, with the on-screen keyboard's terminal keys." },
 ];
 ---
 <Base>
@@ -39,20 +33,18 @@ const shots = [
         Omarchy Mobile runs native Omarchy on phones: Arch Linux ARM, Hyprland and Omarchy's own apps,
         on a mainline Linux kernel, with no Android underneath.
       </p>
-      <p class="lede">
-        It runs on {names(featured)} today, and community ports are bringing it to {inProgress.length} more phones.
-      </p>
       <div class="actions">
-        <a class="button primary" href={`${REPO_URL}#quick-start`}>Install it</a>
-        <a class="button" href="#phones">See the phones</a>
+        <a class="button primary" href="/devices">Install it</a>
+        <a class="button" href="#look">Take a look</a>
       </div>
     </div>
     <figure class="phone">
       <img
-        src="/screens/home.webp"
+        class="frame"
+        src="/gallery/01-lock-glance.webp"
         width="720"
-        height="1440"
-        alt="The Omarchy Mobile home screen: a system-information widget showing Omarchy on kernel 7.3, a weather widget, and Chromium, Files, Foot and Omawrite in the dock."
+        height="1560"
+        alt="The Omarchy Mobile lock screen: the time, the date and the weather, with three notifications."
         fetchpriority="high"
       />
     </figure>
@@ -62,58 +54,58 @@ const shots = [
     <div class="head">
       <h2 id="look">Omarchy, made for your hand</h2>
       <p>
-        The same Omarchy you run on a laptop, with a shell made for a touchscreen: a home screen with widgets and a
-        dock, quick settings a swipe away, every app with search and the on-screen keyboard, and a terminal with
-        the AI agent you pick at first login.
+        The same Omarchy you run on a laptop, with a shell made for a touchscreen: a lock screen and notifications,
+        home screens with widgets, quick settings, messages, calls and contacts, a camera, themes that change the
+        whole phone, and a terminal with the AI agent you pick at first login.
       </p>
     </div>
-    <ul class="shots">
-      {shots.map((s) => (
+    <ul class="gallery">
+      {shots.map((s, i) => (
         <li>
           <figure>
-            <img src={`/screens/${s.file}`} width="720" height="1560" alt={s.alt} loading="lazy" decoding="async" />
+            <button type="button" class="shot" data-index={i} aria-label={`Enlarge: ${s.caption}`}>
+              <img class="frame" src={`/gallery/${s.file}.webp`} width="720" height="1560" alt={s.alt} loading="lazy" decoding="async" />
+            </button>
             <figcaption>{s.caption}</figcaption>
           </figure>
         </li>
       ))}
     </ul>
+    <dialog class="lightbox" aria-label="Screenshot">
+      <figure>
+        <img class="frame" src="" alt="" width="720" height="1560" />
+        <figcaption></figcaption>
+      </figure>
+      <div class="controls">
+        <button type="button" class="button" data-step="-1" aria-label="Previous screenshot">&larr;</button>
+        <span class="pos" aria-live="polite"></span>
+        <button type="button" class="button" data-step="1" aria-label="Next screenshot">&rarr;</button>
+        <button type="button" class="button close">Close</button>
+      </div>
+    </dialog>
   </section>
 
   <section class="wrap block" aria-labelledby="phones">
     <div class="head">
       <h2 id="phones">Phones</h2>
       <p>
-        Each dot is one part of the phone:
+        See which phones it runs on and how far each port has come. Each dot is one part of the phone:
         <span class="key"><span class="dot s-works"></span>works</span>
         <span class="key"><span class="dot s-testing"></span>testing</span>
         <span class="key"><span class="dot s-wip"></span>in progress</span>
         <span class="key"><span class="dot s-no"></span>not yet</span>.
-        The status of every part, with the notes behind it, is on each phone's page.
+        Each phone's page has the status of every part and the notes behind it.
       </p>
     </div>
-    <ul class="featured">
-      {featured.map((d) => (
+    <ul class="phones">
+      {byProgress.map((d) => (
         <li>
-          <a class="card" href={`/devices/${d.codename}`}>
-            <span class="title">{d.title}</span>
-            <span class="soc">{d.soc}</span>
-            <span class="dots" role="img" aria-label={`${countStatus(d, "works")} of ${parts(d).length} parts work`}>
-              {strip(d).map((p) => <span class={`dot s-${p.status}`} title={`${p.name}: ${STATUS_TEXT[p.status]}`}></span>)}
-            </span>
-            <span class="count">{countStatus(d, "works")} of {parts(d).length} parts work</span>
-          </a>
-        </li>
-      ))}
-    </ul>
-    <h3 class="sub">Ports under way</h3>
-    <ul class="ports">
-      {inProgress.map((d) => (
-        <li>
-          <a href={`/devices/${d.codename}`}>{d.title}</a>
+          <a class="name" href={`/devices/${d.codename}`}>{d.title}</a>
           <span class="soc">{d.soc}</span>
-          <span class="dots" role="img" aria-label={`${parts(d).length - countStatus(d, "no")} of ${parts(d).length} parts started`}>
-            {strip(d).map((p) => <span class={`dot s-${p.status}`} title={`${p.name}: ${STATUS_TEXT[p.status]}`}></span>)}
+          <span class="dots" role="img" aria-label={`${countStatus(d, "works")} of ${parts(d).length} parts work`}>
+            {parts(d).map((p) => <span class={`dot s-${p.cell.status}`} title={`${p.name}: ${STATUS_TEXT[p.cell.status]}`}></span>)}
           </span>
+          <span class="count">{countStatus(d, "works")} of {parts(d).length} parts work</span>
         </li>
       ))}
     </ul>
@@ -164,6 +156,46 @@ const shots = [
   </section>
 </Base>
 
+<script>
+  // Lightbox: a screenshot opens enlarged in a modal <dialog>; the arrow keys
+  // and buttons step through them, Escape (native) or Close shuts it, and
+  // focus goes back to the screenshot it came from.
+  const dialog = document.querySelector<HTMLDialogElement>(".lightbox")!;
+  const big = dialog.querySelector("img")!;
+  const cap = dialog.querySelector("figcaption")!;
+  const pos = dialog.querySelector(".pos")!;
+  const shots = [...document.querySelectorAll<HTMLButtonElement>(".gallery .shot")];
+  let current = 0;
+
+  function show(i: number) {
+    current = (i + shots.length) % shots.length;
+    const thumb = shots[current].querySelector("img")!;
+    big.src = thumb.currentSrc || thumb.src;
+    big.alt = thumb.alt;
+    cap.textContent = shots[current].closest("figure")!.querySelector("figcaption")!.textContent;
+    pos.textContent = `${current + 1} of ${shots.length}`;
+  }
+
+  shots.forEach((b, i) =>
+    b.addEventListener("click", () => {
+      show(i);
+      dialog.showModal();
+    }),
+  );
+  dialog.querySelectorAll<HTMLButtonElement>("[data-step]").forEach((b) =>
+    b.addEventListener("click", () => show(current + Number(b.dataset.step))),
+  );
+  dialog.querySelector(".close")!.addEventListener("click", () => dialog.close());
+  dialog.addEventListener("click", (e) => {
+    if (e.target === dialog) dialog.close(); // a click on the backdrop
+  });
+  dialog.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") show(current - 1);
+    if (e.key === "ArrowRight") show(current + 1);
+  });
+  dialog.addEventListener("close", () => shots[current]?.focus());
+</script>
+
 <style>
   .hero {
     display: grid;
@@ -176,36 +208,50 @@ const shots = [
   h1 { margin-bottom: 1.5rem; max-width: 12ch; }
   .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
 
-  .phone { margin: 0; justify-self: center; width: min(100%, 22rem); }
-  .phone img {
-    border-radius: 2.25rem;
-    border: 10px solid var(--bg-deep);
-    outline: 1px solid var(--border-strong);
-    aspect-ratio: 1 / 2;
-    object-fit: cover;
-    width: 100%;
+  /* One phone frame for the hero, the gallery and the lightbox: an inner
+     margin of the page's deep background, a thin outline, the whole
+     screenshot at its own aspect ratio. --bezel scales with the frame. */
+  .frame {
+    --bezel: 6px;
+    display: block; width: 100%; height: auto; aspect-ratio: 720 / 1560;
+    border: var(--bezel) solid var(--bg-deep); outline: 1px solid var(--border-strong);
+    border-radius: calc(var(--bezel) * 3.4);
+    background: var(--bg-deep);
   }
+  .phone { margin: 0; justify-self: center; width: min(100%, 20rem); }
+  .phone .frame { --bezel: 12px; }
 
   .block { padding-top: clamp(3rem, 7vw, 5rem); }
   .head { display: grid; gap: 0.75rem; margin-bottom: 2rem; }
-  .head p { margin: 0; color: var(--text-2); }
+  .head p { margin: 0; color: var(--text-2); max-width: 70ch; }
 
-  .shots {
+  .gallery {
     list-style: none; margin: 0; padding: 0;
-    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(1rem, 3vw, 2rem);
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 10.5rem), 1fr)); gap: clamp(1rem, 2.5vw, 1.75rem);
   }
-  .shots figure { margin: 0; }
-  .shots img {
-    width: 100%; height: auto; border-radius: 1.25rem;
-    border: 6px solid var(--bg-deep); outline: 1px solid var(--border-strong);
+  .gallery figure { margin: 0; }
+  .shot { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: 1.25rem; }
+  .shot:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+  .shot:hover .frame { outline-color: var(--accent); }
+  .gallery figcaption { font-size: 0.875rem; color: var(--muted); margin-top: 0.6rem; }
+
+  .lightbox {
+    border: 1px solid var(--border-strong); border-radius: 1rem; padding: 1rem;
+    background: var(--surface); color: var(--text); max-width: min(92vw, 30rem); max-height: 96vh;
   }
-  .shots figcaption { font-size: 0.875rem; color: var(--muted); margin-top: 0.75rem; }
+  .lightbox::backdrop { background: color-mix(in srgb, var(--bg-deep) 85%, transparent); }
+  .lightbox figure { margin: 0; display: grid; gap: 0.6rem; justify-items: center; }
+  .lightbox .frame { --bezel: 8px; width: auto; max-width: 100%; max-height: calc(96vh - 9rem); }
+  .lightbox figcaption { color: var(--text-2); font-size: 0.9375rem; text-align: center; }
+  .controls { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-top: 0.75rem; }
+  .controls .pos { font-family: var(--font-mono); font-size: 0.875rem; color: var(--muted); min-width: 5.5rem; text-align: center; }
+  .controls .button { background: transparent; cursor: pointer; padding: 0.55rem 0.9rem; }
+  .controls .button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .controls .close { margin-left: 0.5rem; }
 
   .how { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: 2rem 3rem; margin: 2rem 0 0; }
   .how dt { font-family: var(--font-mono); font-weight: 600; color: var(--text); margin-bottom: 0.5rem; }
   .how dd { margin: 0; }
-
-  .sub { font-size: 1rem; margin: 2.5rem 0 0.75rem; color: var(--text-2); }
 
   .dots { display: flex; flex-wrap: wrap; gap: 4px; }
   .dot { width: 0.6rem; height: 0.6rem; border-radius: 50%; background: currentColor; flex: none; }
@@ -213,35 +259,21 @@ const shots = [
   .key { display: inline-flex; align-items: center; gap: 0.35em; margin-inline: 0.35em 0.15em; white-space: nowrap; }
   .key .dot { width: 0.55rem; height: 0.55rem; }
 
-  .featured {
-    list-style: none; margin: 0; padding: 0;
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr)); gap: 1rem;
+  .phones { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--border); }
+  .phones li {
+    display: grid; grid-template-columns: minmax(0, 10rem) minmax(0, 13rem) minmax(0, 1fr) auto; gap: 1rem; align-items: center;
+    padding: 0.75rem 0; border-bottom: 1px solid var(--border);
   }
-  .card {
-    display: grid; gap: 0.5rem; height: 100%; padding: 1.25rem 1.5rem;
-    border: 1px solid var(--border-strong); border-radius: 0.75rem; background: var(--surface);
-    color: inherit; text-decoration: none;
-  }
-  .card:hover { border-color: var(--accent); }
-  .card .title { font-size: 1.25rem; font-weight: 600; color: var(--text); }
-  .card .dots { margin-top: 0.5rem; }
-  .card .dot { width: 0.75rem; height: 0.75rem; }
-  .count { font-family: var(--font-mono); font-size: 0.875rem; color: var(--works); }
-
-  .ports { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--border); }
-  .ports li {
-    display: grid; grid-template-columns: minmax(0, 11rem) minmax(0, 14rem) minmax(0, 1fr); gap: 1rem; align-items: center;
-    padding: 0.7rem 0; border-bottom: 1px solid var(--border);
-  }
-  .ports a { font-weight: 500; }
+  .phones .name { font-weight: 500; }
   .soc { color: var(--muted); font-size: 0.9375rem; }
+  .count { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--muted); white-space: nowrap; }
 
   @media (max-width: 52rem) {
     .hero { grid-template-columns: 1fr; }
     .phone { width: min(80%, 18rem); }
-    .shots { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  }
-  @media (max-width: 44rem) {
-    .ports li { grid-template-columns: 1fr; gap: 0.35rem; }
+    .phones li { grid-template-columns: minmax(0, 1fr) auto; gap: 0.35rem 1rem; }
+    .phones .soc { grid-column: 1 / -1; grid-row: 2; }
+    .phones .dots { grid-column: 1 / -1; grid-row: 3; }
+    .phones .count { grid-column: 2; grid-row: 1; }
   }
 </style>
