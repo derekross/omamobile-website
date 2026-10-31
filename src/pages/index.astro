@@ -1,10 +1,13 @@
 ---
 import Base from "../layouts/Base.astro";
-import { devices, reference, inline, STATUS_TEXT, REPO_URL } from "../lib/devices";
+import { featured, inProgress, parts, countStatus, STATUS_TEXT, REPO_URL, type Device } from "../lib/devices";
 
-const detail = reference.detail ?? [];
-const ports = devices.slice(1);
-
+// "Pixel 7 Pro and Pixel 6 Pro", "A, B and C"
+const names = (ds: Device[]) => {
+  const t = ds.map((d) => `the ${d.title}`);
+  return t.length < 2 ? (t[0] ?? "") : `${t.slice(0, -1).join(", ")} and ${t.at(-1)}`;
+};
+const strip = (d: Device) => parts(d).map((p) => ({ name: p.name, status: p.cell.status }));
 const shots = [
   {
     file: "home-full.webp",
@@ -37,11 +40,11 @@ const shots = [
         on a mainline Linux kernel, with no Android underneath.
       </p>
       <p class="lede">
-        It runs on the {reference.title} today, and community ports are bringing it to more phones.
+        It runs on {names(featured)} today, and community ports are bringing it to {inProgress.length} more phones.
       </p>
       <div class="actions">
-        <a class="button primary" href={`${REPO_URL}#quick-start`}>Install on a {reference.title}</a>
-        <a class="button" href="/devices">See supported phones</a>
+        <a class="button primary" href={`${REPO_URL}#quick-start`}>Install it</a>
+        <a class="button" href="#phones">See the phones</a>
       </div>
     </div>
     <figure class="phone">
@@ -49,31 +52,20 @@ const shots = [
         src="/screens/home.webp"
         width="720"
         height="1440"
-        alt={`The Omarchy Mobile home screen on a ${reference.title}: a system-information widget showing Omarchy on kernel 7.3, a weather widget, and Chromium, Files, Foot and Omawrite in the dock.`}
+        alt="The Omarchy Mobile home screen: a system-information widget showing Omarchy on kernel 7.3, a weather widget, and Chromium, Files, Foot and Omawrite in the dock."
         fetchpriority="high"
       />
     </figure>
   </section>
 
-  <section class="wrap block" aria-labelledby="today">
-    <div class="head">
-      <h2 id="today">On the {reference.title} today</h2>
-      <p>The notes behind each status are on the <a href={`/devices/${reference.codename}`}>{reference.title} page</a>.</p>
-    </div>
-    <ul class="today">
-      {detail.map((s) => (
-        <li>
-          <span class="name">{s.name}</span>
-          <span class={`status s-${s.cell.status}`}>{STATUS_TEXT[s.cell.status]}</span>
-          {s.cell.detail && <span class="note" set:html={inline(s.cell.detail)} />}
-        </li>
-      ))}
-    </ul>
-  </section>
-
   <section class="wrap block" aria-labelledby="look">
     <div class="head">
-      <h2 id="look">A look around</h2>
+      <h2 id="look">Omarchy, made for your hand</h2>
+      <p>
+        The same Omarchy you run on a laptop, with a shell made for a touchscreen: a home screen with widgets and a
+        dock, quick settings a swipe away, every app with search and the on-screen keyboard, and a terminal with
+        the AI agent you pick at first login.
+      </p>
     </div>
     <ul class="shots">
       {shots.map((s) => (
@@ -85,6 +77,49 @@ const shots = [
         </li>
       ))}
     </ul>
+  </section>
+
+  <section class="wrap block" aria-labelledby="phones">
+    <div class="head">
+      <h2 id="phones">Phones</h2>
+      <p>
+        Each dot is one part of the phone:
+        <span class="key"><span class="dot s-works"></span>works</span>
+        <span class="key"><span class="dot s-testing"></span>testing</span>
+        <span class="key"><span class="dot s-wip"></span>in progress</span>
+        <span class="key"><span class="dot s-no"></span>not yet</span>.
+        The status of every part, with the notes behind it, is on each phone's page.
+      </p>
+    </div>
+    <ul class="featured">
+      {featured.map((d) => (
+        <li>
+          <a class="card" href={`/devices/${d.codename}`}>
+            <span class="title">{d.title}</span>
+            <span class="soc">{d.soc}</span>
+            <span class="dots" role="img" aria-label={`${countStatus(d, "works")} of ${parts(d).length} parts work`}>
+              {strip(d).map((p) => <span class={`dot s-${p.status}`} title={`${p.name}: ${STATUS_TEXT[p.status]}`}></span>)}
+            </span>
+            <span class="count">{countStatus(d, "works")} of {parts(d).length} parts work</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <h3 class="sub">Ports under way</h3>
+    <ul class="ports">
+      {inProgress.map((d) => (
+        <li>
+          <a href={`/devices/${d.codename}`}>{d.title}</a>
+          <span class="soc">{d.soc}</span>
+          <span class="dots" role="img" aria-label={`${parts(d).length - countStatus(d, "no")} of ${parts(d).length} parts started`}>
+            {strip(d).map((p) => <span class={`dot s-${p.status}`} title={`${p.name}: ${STATUS_TEXT[p.status]}`}></span>)}
+          </span>
+        </li>
+      ))}
+    </ul>
+    <div class="actions">
+      <a class="button" href="/devices">Compare every phone</a>
+    </div>
   </section>
 
   <section class="wrap block" aria-labelledby="how">
@@ -118,20 +153,10 @@ const shots = [
     <div class="head">
       <h2 id="ports">Bring it to your phone</h2>
       <p>
-        Community ports are under way on {ports.length} more phones, and the wanted list names more,
-        each with a starting point. The safety model comes first: stock stays on its own slot, and only our slot
-        and the user data are ever written.
+        The wanted list names more phones, each with a starting point. The safety model comes first: stock stays on
+        its own slot, and only our slot and the user data are ever written.
       </p>
     </div>
-    <ul class="ports">
-      {ports.map((d) => (
-        <li>
-          <a href={`/devices/${d.codename}`}>{d.title}</a>
-          <span class="soc">{d.soc}</span>
-          <span class={`status s-${d.cells["Boot"]?.status ?? "no"}`}>Boot: {STATUS_TEXT[d.cells["Boot"]?.status ?? "no"]}</span>
-        </li>
-      ))}
-    </ul>
     <div class="actions">
       <a class="button" href="/devices#wanted">See the wanted list</a>
       <a class="button" href={`${REPO_URL}/blob/main/CONTRIBUTING.md`}>Read the contributor guide</a>
@@ -165,18 +190,6 @@ const shots = [
   .head { display: grid; gap: 0.75rem; margin-bottom: 2rem; }
   .head p { margin: 0; color: var(--text-2); }
 
-  .today {
-    list-style: none; margin: 0; padding: 0;
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
-    column-gap: 3rem; border-top: 1px solid var(--border);
-  }
-  .today li {
-    display: grid; grid-template-columns: 1fr auto; gap: 0.15rem 1rem; align-items: baseline;
-    padding: 0.8rem 0; border-bottom: 1px solid var(--border);
-  }
-  .today .name { color: var(--text); font-weight: 500; }
-  .today .note { grid-column: 1 / -1; font-size: 0.875rem; color: var(--muted); }
-
   .shots {
     list-style: none; margin: 0; padding: 0;
     display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(1rem, 3vw, 2rem);
@@ -192,10 +205,33 @@ const shots = [
   .how dt { font-family: var(--font-mono); font-weight: 600; color: var(--text); margin-bottom: 0.5rem; }
   .how dd { margin: 0; }
 
+  .sub { font-size: 1rem; margin: 2.5rem 0 0.75rem; color: var(--text-2); }
+
+  .dots { display: flex; flex-wrap: wrap; gap: 4px; }
+  .dot { width: 0.6rem; height: 0.6rem; border-radius: 50%; background: currentColor; flex: none; }
+  .dot.s-no, .dot.s-none { background: transparent; box-shadow: inset 0 0 0 1.5px currentColor; }
+  .key { display: inline-flex; align-items: center; gap: 0.35em; margin-inline: 0.35em 0.15em; white-space: nowrap; }
+  .key .dot { width: 0.55rem; height: 0.55rem; }
+
+  .featured {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr)); gap: 1rem;
+  }
+  .card {
+    display: grid; gap: 0.5rem; height: 100%; padding: 1.25rem 1.5rem;
+    border: 1px solid var(--border-strong); border-radius: 0.75rem; background: var(--surface);
+    color: inherit; text-decoration: none;
+  }
+  .card:hover { border-color: var(--accent); }
+  .card .title { font-size: 1.25rem; font-weight: 600; color: var(--text); }
+  .card .dots { margin-top: 0.5rem; }
+  .card .dot { width: 0.75rem; height: 0.75rem; }
+  .count { font-family: var(--font-mono); font-size: 0.875rem; color: var(--works); }
+
   .ports { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--border); }
   .ports li {
-    display: grid; grid-template-columns: minmax(0, 14rem) minmax(0, 1fr) auto; gap: 1rem; align-items: baseline;
-    padding: 0.8rem 0; border-bottom: 1px solid var(--border);
+    display: grid; grid-template-columns: minmax(0, 11rem) minmax(0, 14rem) minmax(0, 1fr); gap: 1rem; align-items: center;
+    padding: 0.7rem 0; border-bottom: 1px solid var(--border);
   }
   .ports a { font-weight: 500; }
   .soc { color: var(--muted); font-size: 0.9375rem; }
@@ -205,8 +241,7 @@ const shots = [
     .phone { width: min(80%, 18rem); }
     .shots { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
-  @media (max-width: 34rem) {
-    .ports li { grid-template-columns: 1fr auto; }
-    .soc { grid-column: 1; grid-row: 2; }
+  @media (max-width: 44rem) {
+    .ports li { grid-template-columns: 1fr; gap: 0.35rem; }
   }
 </style>

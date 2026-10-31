@@ -153,3 +153,21 @@ export function inline(md: string): string {
     .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
     .replace(/(^|[\s(])\*([^*]+)\*/g, "$1<em>$2</em>");
 }
+
+// The parts a device has: a "-" cell means the hardware doesn't exist on it.
+export function parts(d: Device): { name: string; cell: Cell }[] {
+  return subsystems.map((name) => ({ name, cell: d.cells[name] })).filter((p) => p.cell && p.cell.status !== "none");
+}
+
+export function countStatus(d: Device, ...status: Status[]): number {
+  return parts(d).filter((p) => status.includes(p.cell.status)).length;
+}
+
+// The best-supported phones: Boot works and at least half of their parts work,
+// most working parts first. Every other device is a port in progress, the
+// furthest along (most parts past "no") first.
+const isFeatured = (d: Device) => d.cells["Boot"]?.status === "works" && countStatus(d, "works") * 2 >= parts(d).length;
+export const featured = devices.filter(isFeatured).sort((a, b) => countStatus(b, "works") - countStatus(a, "works"));
+export const inProgress = devices
+  .filter((d) => !isFeatured(d))
+  .sort((a, b) => parts(b).length - countStatus(b, "no") - (parts(a).length - countStatus(a, "no")));
