@@ -42,12 +42,8 @@ const themeName = (t: string) => t.split("-").map((w) => w[0].toUpperCase() + w.
     <link rel="icon" href="/favicon-48.png" type="image/png" sizes="48x48" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="theme-color" content="#1a1b26" />
-    <script is:inline>
-      try {
-        const t = localStorage.getItem("theme");
-        if (t) document.documentElement.dataset.theme = t;
-      } catch {}
-    </script>
+    <!-- The server's CSP allows scripts from the site only (no inline). -->
+    <script is:inline src="/theme-init.js"></script>
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
@@ -82,15 +78,13 @@ const themeName = (t: string) => t.split("-").map((w) => w[0].toUpperCase() + w.
         </label>
       </div>
     </footer>
-    <script is:inline>
-      (() => {
-        const sel = document.getElementById("theme-picker");
-        sel.value = document.documentElement.dataset.theme || "tokyo-night";
-        sel.addEventListener("change", () => {
-          document.documentElement.dataset.theme = sel.value;
-          try { localStorage.setItem("theme", sel.value); } catch {}
-        });
-      })();
+    <script>
+      const sel = document.getElementById("theme-picker") as HTMLSelectElement;
+      sel.value = document.documentElement.dataset.theme || "tokyo-night";
+      sel.addEventListener("change", () => {
+        document.documentElement.dataset.theme = sel.value;
+        try { localStorage.setItem("theme", sel.value); } catch {}
+      });
     </script>
   </body>
 </html>
