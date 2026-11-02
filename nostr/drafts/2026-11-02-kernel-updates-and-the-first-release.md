@@ -4,7 +4,7 @@ d: 2026-11-02-kernel-updates-and-the-first-release
 title: "Omarchy Mobile: kernel updates through pacman, and the first release is close"
 summary: "The Pixel 7 Pro's kernel now updates like any other package, with a way back. The release tools are done, the first developer preview is being built and test-installed, Hyprland 0.57 is in, and contributors moved the Pixel 9a, 7, 8 Pro, 6a and 8a forward."
 t: [omarchy, omarchymobile, linux, mobilelinux, arch, hyprland, pixel]
-status: draft
+status: published 2026-11-02 (nostr/events/2026-11-02-kernel-updates-and-the-first-release.json)
 ---
 
 Today was about getting ready to ship. The Pixel 7 Pro can now take a new kernel through a normal system update, the tools that build and check a release are finished, and the first release is being built and test-installed. Here's what changed since yesterday's post.
