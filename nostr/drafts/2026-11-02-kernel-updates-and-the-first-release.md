@@ -31,7 +31,7 @@ The first release, 2026.11.02, is a developer preview for the Pixel 7 Pro. It is
 - **Weather waits for the network after a wake.** It used to try once, the moment the phone woke, before Wi-Fi was back, and give up until the next half hour. Now it retries for up to 75 seconds and keeps showing the last good reading.
 - **Files opens folders with one tap** (Somnius), and the file picker no longer waits 25 seconds at login.
 - **The power and volume keys ignore the on-screen keyboard,** so their shortcuts work while it's up.
-- **Sleep:** the latest sleep test ran 11 suspends with no failures. Two findings are open, so sleep stays a work in progress for now.
+- **Sleep:** the latest sleep test ran 11 suspends with no failures. The power key going dead after a quick double press is fixed; Wi-Fi still takes about 5 seconds to reconnect after each wake, so sleep stays a work in progress for now.
 - **Pixel 7 Pros with a BOE screen** get their own display driver, which fixes the garbled picture some of those phones showed after waking (haudamekki).
 - **The smoke test knows two harmless log lines** and counts them instead of flagging them, and it now fails outright if the phone's storage stops answering.
 - **New screenshots** of the keyboard and voice typing on the README and on omamobile.org.
