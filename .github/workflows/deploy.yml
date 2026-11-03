@@ -9,6 +9,9 @@ on:
   schedule:
     - cron: "23 */6 * * *"
   workflow_dispatch:
+  # The main repository sends this when docs/DEVICES.md or device/*/NOTES.md change on main.
+  repository_dispatch:
+    types: [devices-changed]
 
 concurrency:
   group: deploy
