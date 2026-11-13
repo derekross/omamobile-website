@@ -8,9 +8,12 @@ import { REPO_URL } from "../lib/devices";
 interface Props {
   title?: string;
   description?: string;
+  // A draft page, built but kept out of search engines until it is announced
+  noindex?: boolean;
 }
 const {
   title,
+  noindex = false,
   description = "Native Omarchy on your phone: Arch Linux, Hyprland and Omarchy's apps on a mainline Linux kernel, with no Android underneath.",
 } = Astro.props;
 const fullTitle = title ? `${title} · Omarchy Mobile` : "Omarchy Mobile";
@@ -30,6 +33,7 @@ const themeName = (t: string) => t.split("-").map((w) => w[0].toUpperCase() + w.
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />

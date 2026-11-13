@@ -1,0 +1,99 @@
+---
+// The web installer's page: what it is, what it does today, and where it
+// runs. A draft: not in the navigation, and kept out of search engines.
+//
+// The installer itself is a separate build, from derekross/omamobile-installer
+// (`web/build.sh`, its web/dist directory), served at /install/web/app/. It is
+// not part of this site's build yet. Before it can talk to a phone there, the
+// server must send `Permissions-Policy: usb=(self)` for that path (the site
+// sends `usb=()` everywhere today) and a Content-Security-Policy that lets it
+// fetch from https://pkgs.omamobile.org (today's `connect-src 'self' https:`
+// does) and compile WebAssembly (`'wasm-unsafe-eval'`, sent today). It must
+// not be framed by another origin.
+import Base from "../../layouts/Base.astro";
+import { devices, REPO_URL } from "../../lib/devices";
+
+const INSTALLER_REPO = "https://github.com/derekross/omamobile-installer";
+const APP = "/install/web/app/";
+// The phones with a published release: the release server's own list
+// (the installer's DEVICES); named here by the device data's title
+const released = ["cheetah"].map((c) => devices.find((d) => d.codename === c)?.title ?? c);
+---
+<Base title="Install from your browser" description="Omarchy Mobile's installer in a browser tab: it checks your phone, downloads the release and checks its signature, and shows exactly what an install writes." noindex>
+  <section class="wrap intro">
+    <h1>Install from your browser</h1>
+    <p class="lede">
+      Plug your phone in, open the installer, and follow the steps. The page talks to the phone over USB, downloads
+      the latest Omarchy Mobile release and checks it against the release key, and shows you exactly what it will
+      write before anything happens.
+    </p>
+    <p><a class="button primary" href={APP}>Open the installer</a></p>
+  </section>
+
+  <section class="wrap" aria-labelledby="today">
+    <h2 id="today">What it does today</h2>
+    <ul class="plain">
+      <li><strong>Checks your phone.</strong> With the phone in Fastboot Mode, it asks the bootloader what it is: the model, whether it is unlocked, which Android build it runs. It never sends the unlock command; a locked phone is shown the steps.</li>
+      <li><strong>Downloads and checks the release.</strong> The latest release for your phone, from <code>pkgs.omamobile.org</code>: its signature is checked against the release key built into the installer, then every image against the signed checksums. The system image is about 3.4 GB. It is kept in your browser's own storage, so an interrupted download picks up where it stopped and a later visit doesn't download it again. You can delete it from the page. A release you saved on your computer works too.</li>
+      <li><strong>Runs a dry run.</strong> Every check an install starts with, then the list of what it would write: slot B's boot images and <code>userdata</code>, and nothing else. Nothing is written.</li>
+    </ul>
+    <p>
+      <strong>It doesn't write to the phone yet.</strong> The write path is built and tested against a pretend phone, and
+      it comes to this page after an attended run in a real browser on a real phone. Until then, install with the
+      <a href={`${REPO_URL}#quick-start`}>command-line installer</a>.
+    </p>
+    <p>Today it has releases for: {released.join(", ")}.</p>
+    <p>
+      On the Pixel 7 Pro the page stops after checking the phone: the bootloader reports the version of only one of its
+      two bootloader copies, and the page can't confirm that the other matches. The command-line installer asks you to
+      confirm it instead.
+    </p>
+  </section>
+
+  <section class="wrap" aria-labelledby="erase">
+    <h2 id="erase">Installing erases the phone</h2>
+    <p>
+      An install replaces <code>userdata</code>, which holds everything on the phone: apps, photos, accounts, settings.
+      Back up what you want to keep first. Stock Android stays on the phone's other slot (slot A), as the way back, but
+      it starts with a factory reset. The installer never writes slot A, the bootloader, the radio or the phone's
+      calibration data.
+    </p>
+  </section>
+
+  <section class="wrap" aria-labelledby="browsers">
+    <h2 id="browsers">Which browsers</h2>
+    <p>
+      The installer needs WebUSB, which Chromium-based browsers have: Chrome, Edge, Opera and other Chromium browsers,
+      on Linux, macOS, Windows and ChromeOS. Firefox and Safari don't have WebUSB, so they can't reach a phone.
+    </p>
+    <ul class="plain">
+      <li><strong>Linux:</strong> your user needs permission to open the phone's USB device (a udev rule for fastboot devices). A browser installed as a sandboxed package may not see USB devices at all.</li>
+      <li><strong>Windows:</strong> the phone's fastboot interface needs the WinUSB driver before a browser can use it.</li>
+      <li>Keep the tab in front and the computer awake while the page works.</li>
+    </ul>
+  </section>
+
+  <section class="wrap" aria-labelledby="need">
+    <h2 id="need">What you need</h2>
+    <ul class="plain">
+      <li>The phone, with its bootloader unlocked (the installer shows how, but never unlocks it for you).</li>
+      <li>A USB cable, and about 4 GB of free disk space for the download.</li>
+      <li>Google's factory image for your phone's Android build, saved from Google's page. The installer tells you which file; Omarchy Mobile never hosts Google's files.</li>
+    </ul>
+    <p>
+      The installer is open source: <a href={INSTALLER_REPO}>omamobile-installer</a>. It runs entirely in your browser;
+      nothing you type and no file you pick is uploaded.
+    </p>
+  </section>
+</Base>
+
+<style>
+  .intro { padding-block: clamp(3rem, 7vw, 4.5rem) 1rem; }
+  .intro h1 { margin-bottom: 1rem; }
+  .lede { font-size: 1.125rem; color: var(--text); }
+  section + section { margin-top: 2.5rem; }
+  section h2 { margin-bottom: 1rem; }
+  .plain { padding-left: 1.2rem; max-width: var(--measure); }
+  .plain li { margin-bottom: 0.75rem; }
+  .plain strong { color: var(--text); }
+</style>
