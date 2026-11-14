@@ -3,7 +3,7 @@ import "@fontsource-variable/jetbrains-mono";
 import "@fontsource-variable/geist";
 import "../styles/global.css";
 import themes from "../lib/themes.json";
-import { REPO_URL } from "../lib/devices";
+import { COMMUNITY_URL, REPO_URL } from "../lib/devices";
 
 interface Props {
   title?: string;
@@ -19,6 +19,7 @@ const nav = [
   { href: "/devices", label: "Devices" },
   { href: `${REPO_URL}#quick-start`, label: "Install" },
   { href: "/news", label: "News" },
+  { href: COMMUNITY_URL, label: "Community" },
   { href: REPO_URL, label: "GitHub" },
 ];
 const themeName = (t: string) => t.split("-").map((w) => w[0].toUpperCase() + w.slice(1)).join(" ");
@@ -69,6 +70,7 @@ const themeName = (t: string) => t.split("-").map((w) => w[0].toUpperCase() + w.
           It isn't an official Omarchy or Basecamp product. Code and site are MIT licensed,
           on <a href={REPO_URL}>GitHub</a>.<br />
           Nostr: <a href="https://njump.me/npub1epdgm26q2wx0ee37q8u692z8w2ngwqepd9fvxy04uml8nz7sx7fs9hkynf">@omamobile.org</a>
+          · Chat: <a href={COMMUNITY_URL}>the community on Armada</a>
         </p>
         <label class="theme">
           <span>Theme</span>
