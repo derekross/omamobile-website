@@ -2,16 +2,27 @@
 // The web installer's page: what it is, what it does today, and where it
 // runs. A draft: not in the navigation, and kept out of search engines.
 //
+// Built only with the switch in installer-web.env on (INSTALLER_WEB=on): with
+// it off, as committed, getStaticPaths names no page and /install/web/ does
+// not exist on the site. The route is a parameter for that reason alone.
+//
 // The installer itself is a separate build, from derekross/omamobile-installer
-// (`web/build.sh`, its web/dist directory), served at /install/web/app/. It is
-// not part of this site's build yet. Before it can talk to a phone there, the
-// server must send `Permissions-Policy: usb=(self)` for that path (the site
-// sends `usb=()` everywhere today) and a Content-Security-Policy that lets it
-// fetch from https://pkgs.omamobile.org (today's `connect-src 'self' https:`
-// does) and compile WebAssembly (`'wasm-unsafe-eval'`, sent today). It must
-// not be framed by another origin.
+// (`web/build.sh`, its web/dist directory), served at /install/web/app/: the
+// deploy fetches one tagged release's asset, checked against the SHA-256 in
+// installer-web.env (scripts/installer-web.sh). Before it can talk to a phone
+// there, the server must send `Permissions-Policy: usb=(self)` for that path
+// (the site sends `usb=()` everywhere today): a change on the server, by hand,
+// prepared in deploy/nginx/ (docs/INSTALLER-WEB.md). Its Content-Security-Policy
+// must let it fetch from https://pkgs.omamobile.org (today's
+// `connect-src 'self' https:` does) and compile WebAssembly
+// (`'wasm-unsafe-eval'`, sent today). It must not be framed by another origin.
 import Base from "../../layouts/Base.astro";
 import { devices, REPO_URL } from "../../lib/devices";
+import { INSTALLER_WEB_ON } from "../../lib/installer-web";
+
+export function getStaticPaths() {
+  return INSTALLER_WEB_ON ? [{ params: { page: "web" } }] : [];
+}
 
 const INSTALLER_REPO = "https://github.com/derekross/omamobile-installer";
 const APP = "/install/web/app/";
@@ -87,7 +98,8 @@ const released = ["cheetah"].map((c) => devices.find((d) => d.codename === c)?.t
   </section>
 </Base>
 
-<style>
+<!-- Inline, so that a build with the switch off emits no stylesheet for a page it does not build -->
+<style is:inline>
   .intro { padding-block: clamp(3rem, 7vw, 4.5rem) 1rem; }
   .intro h1 { margin-bottom: 1rem; }
   .lede { font-size: 1.125rem; color: var(--text); }
