@@ -23,6 +23,8 @@ npm run build      # fetches the news, then builds the static site in dist/
 
 The build reads `docs/DEVICES.md` from a checkout of the main repository, `../omarchy-mobile` by default (set `OMAMOBILE_REPO` to change it). [docs/DESIGN.md](docs/DESIGN.md) records the decisions so far.
 
+The web installer (`/install/web/` and the installer's own build at `/install/web/app/`) is behind one switch, `installer-web.env`, which is off: [docs/INSTALLER-WEB.md](docs/INSTALLER-WEB.md) says what turning it on does, and the server change it also needs.
+
 ## Rules for this repository
 
 The repository is public, and so is everything the site says. Read [AGENTS.md](AGENTS.md) before you change copy or the installer.
