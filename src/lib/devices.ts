@@ -96,11 +96,15 @@ export function plain(md: string): string {
 }
 
 export function parseCell(text: string): Cell {
-  const m = text.match(/^\s*(works|testing|partial|WIP|built|boots|no|-)(?![A-Za-z])\s*(?:\((.*)\))?\s*(.*)$/is);
+  // "works (opt-in)" is its own term in DEVICES.md's legend: verified, and
+  // off until the owner turns it on. It keeps "works"'s colour and weight,
+  // and the label says opt-in, so the bracket isn't read as the detail.
+  const m = text.match(/^\s*(works|testing|partial|WIP|built|boots|no|-)(?![A-Za-z])\s*(\(opt-in\))?\s*(?:\((.*)\))?\s*(.*)$/is);
   if (!m) return { status: "no", label: text, detail: "" };
   const word = m[1];
-  const detail = [m[2], m[3]].filter(Boolean).join(" ").trim();
-  return { status: STATUS_WORDS[word.toLowerCase()] ?? "no", label: word, detail };
+  const label = m[2] ? `${word} (opt-in)` : word;
+  const detail = [m[3], m[4]].filter(Boolean).join(" ").trim();
+  return { status: STATUS_WORDS[word.toLowerCase()] ?? "no", label, detail };
 }
 
 function load() {
