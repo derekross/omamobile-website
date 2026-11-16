@@ -20,7 +20,7 @@ const fullTitle = title ? `${title} · Omarchy Mobile` : "Omarchy Mobile";
 const path = Astro.url.pathname.replace(/\/$/, "") || "/";
 const nav = [
   { href: "/devices", label: "Devices" },
-  { href: `${REPO_URL}#quick-start`, label: "Install" },
+  { href: "/install", label: "Install" },
   { href: "/news", label: "News" },
   { href: COMMUNITY_URL, label: "Community" },
   { href: REPO_URL, label: "GitHub" },

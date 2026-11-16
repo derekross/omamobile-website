@@ -1,0 +1,211 @@
+---
+// Install: the three ways onto a phone, as they stand. The desktop app
+// reinstalls, the web page checks and writes nothing, and first installs go
+// through the command line. Keep each claim to what has run on hardware
+// (the installer repository's docs/GO-LIVE.md, and docs/INSTALL.md here).
+import Base from "../../layouts/Base.astro";
+import { REPO_URL } from "../../lib/devices";
+
+const INSTALLER_REPO = "https://github.com/derekross/omamobile-installer";
+const APP_RELEASE = `${INSTALLER_REPO}/releases/tag/v0.1.0`;
+const APP_DOCS = `${INSTALLER_REPO}/blob/main/docs/INSTALL-APP.md`;
+const WEB_APP = "/install/web/app/";
+const INSTALL_DOC = `${REPO_URL}/blob/main/docs/INSTALL.md`;
+const GUIDED_DOC = `${REPO_URL}/blob/main/docs/INSTALL-GUIDED.md`;
+---
+<Base title="Install" description="Install Omarchy Mobile on your phone: the desktop app, a check from your browser, or the command line.">
+  <section class="wrap intro">
+    <h1>Install Omarchy Mobile</h1>
+    <p class="lede">
+      Three ways onto your phone, each from a signed release. Plug the phone into a computer with a USB cable, and
+      the installer checks it, shows exactly what it will write, and writes nothing until you type the phone's
+      codename.
+    </p>
+    <p class="facts">
+      <span>Pixel 7 Pro</span>
+      <span>Release 2026.11.15 or later</span>
+      <span>Stock Android stays on slot A</span>
+    </p>
+  </section>
+
+  <section class="wrap block" aria-labelledby="start">
+    <div class="head">
+      <h2 id="start">Start here</h2>
+      <p>For most people: a window that walks you through it, or a page that checks your phone first.</p>
+    </div>
+    <div class="ways">
+      <article class="way">
+        <figure class="shot">
+          <img
+            src="/install/app-reinstall.webp"
+            width="900"
+            height="720"
+            loading="lazy"
+            decoding="async"
+            alt="The Omarchy Mobile Installer window asking what is on the phone's slot B, with the choices to install Omarchy Mobile again, Android is on slot B, or not sure."
+          />
+        </figure>
+        <div class="body">
+          <p class="kicker">Desktop app</p>
+          <h3>Omarchy Mobile Installer</h3>
+          <p>
+            A desktop app for Linux. It writes the phone, waits for its first start, adds the USB connection, backs
+            up the phone's radio partitions, adds the phone's firmware from Google's factory image, restarts it and
+            checks it.
+          </p>
+          <p>
+            <strong>Today it reinstalls:</strong> it is for a Pixel 7 Pro that already runs Omarchy Mobile. A first
+            install from stock Android uses the <a href="#advanced">command line</a> for now.
+          </p>
+          <p class="meta">Linux on x86_64: an Arch package for Omarchy and Arch Linux, an AppImage for other distributions.</p>
+          <div class="actions">
+            <a class="button primary" href={APP_RELEASE}>Download v0.1.0</a>
+            <a class="button" href={APP_DOCS}>How to install it</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="way">
+        <figure class="shot">
+          <img
+            src="/install/web-check.webp"
+            width="800"
+            height="740"
+            loading="lazy"
+            decoding="async"
+            alt="The web page's first screen: a notice that it cannot write to a phone, the latest release for the Pixel 7 Pro from the release server, and a button to download and check it."
+          />
+        </figure>
+        <div class="body">
+          <p class="kicker">In your browser</p>
+          <h3>Check your phone and a release</h3>
+          <p>
+            A page in Chrome, Edge or another Chromium-based browser. It downloads the release and checks its
+            signature, looks at your phone over USB, and runs a dry run that lists exactly what an install would
+            write.
+          </p>
+          <p>
+            <strong>It checks; it doesn't install.</strong> Nothing is written to the phone. Installing from the
+            browser is coming.
+          </p>
+          <p class="meta">Nothing you type and no file you pick leaves your computer.</p>
+          <div class="actions">
+            <a class="button primary" href={WEB_APP}>Check your phone</a>
+            <a class="button" href="/install/web/">About the page</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="wrap block" aria-labelledby="advanced">
+    <div class="head">
+      <h2 id="advanced">Advanced: the command line</h2>
+      <p>
+        For first installs today, for people at home in a terminal, and for the agent you run. One command from the
+        release you download runs the whole install, stops when it needs you, and goes on from where it stopped.
+      </p>
+    </div>
+    <pre class="cmd"><code>cd omamobile-cheetah-&lt;version&gt;
+bash install --guided</code></pre>
+    <dl class="how">
+      <div>
+        <dt>The guided install</dt>
+        <dd>
+          First installs and reinstalls, from the warning to a checked phone. A first install on a Pixel 7 Pro
+          still stops at the bootloader check; the guide says what to do.
+          {" "}<a href={INSTALL_DOC}>The install guide</a> · <a href={GUIDED_DOC}>How it works</a>
+        </dd>
+      </div>
+      <div>
+        <dt>Step by step</dt>
+        <dd>
+          The same install by hand: <code>bash install --dry-run</code>, then <code>bash install</code>
+          (<code>tools/install-phone</code>), the radio backup and the firmware, each on its own.
+          {" "}<a href={`${INSTALL_DOC}#1-unlock-the-bootloader-this-erases-the-phone`}>The steps</a>
+        </dd>
+      </div>
+      <div>
+        <dt>Build it yourself</dt>
+        <dd>
+          The packages, the system image and the kernel, built from source on your own computer.
+          {" "}<a href={`${REPO_URL}#quick-start`}>The repository</a>
+        </dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="wrap block" aria-labelledby="know">
+    <div class="head">
+      <h2 id="know">Before you install</h2>
+    </div>
+    <dl class="how">
+      <div>
+        <dt>Installing erases the phone</dt>
+        <dd>
+          Unlocking the bootloader erases it, and the install replaces its user data. Copy off what you want to keep
+          first.
+        </dd>
+      </div>
+      <div>
+        <dt>Your way back stays</dt>
+        <dd>
+          Only the phone's second boot slot and its user data are written. Stock Android stays on the other slot,
+          and the bootloader, the radio and the phone's calibration are never touched.
+        </dd>
+      </div>
+      <div>
+        <dt>Google's files stay Google's</dt>
+        <dd>
+          The phone's firmware comes from Google's factory image for your phone, on your own computer. Omarchy
+          Mobile never hosts Google's files.
+        </dd>
+      </div>
+    </dl>
+    <div class="actions">
+      <a class="button" href="/devices/cheetah">What works on the Pixel 7 Pro</a>
+      <a class="button" href={`${REPO_URL}/releases`}>Releases</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .intro { padding-block: clamp(3rem, 7vw, 4.5rem) 0; }
+  .intro h1 { margin-bottom: 1.5rem; }
+  .lede { font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.25rem); color: var(--text-2); max-width: 52ch; }
+  .facts { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.5rem 0 0; max-width: none; }
+  .facts span {
+    font-family: var(--font-mono); font-size: 0.8125rem; color: var(--text-2);
+    border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0.25rem 0.6rem;
+  }
+
+  .block { padding-top: clamp(3rem, 7vw, 5rem); }
+  .head { display: grid; gap: 0.75rem; margin-bottom: 2rem; }
+  .head p { margin: 0; color: var(--text-2); max-width: 70ch; }
+  .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }
+
+  .ways { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr)); gap: clamp(1.25rem, 3vw, 2rem); }
+  .way {
+    display: grid; grid-template-rows: auto 1fr;
+    border: 1px solid var(--border); border-radius: calc(var(--radius) * 2); background: var(--surface); overflow: hidden;
+  }
+  .shot { margin: 0; background: var(--bg-deep); border-bottom: 1px solid var(--border); padding: clamp(0.75rem, 2vw, 1.25rem); }
+  .shot img { width: 100%; aspect-ratio: 900 / 720; object-fit: cover; object-position: top; border-radius: var(--radius); outline: 1px solid var(--border-strong); }
+  .body { display: flex; flex-direction: column; padding: clamp(1.25rem, 3vw, 1.75rem); }
+  .body p { font-size: 0.9375rem; }
+  .body strong { color: var(--text); }
+  .kicker { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--accent); margin: 0 0 0.4rem; }
+  .body h3 { font-size: 1.375rem; margin-bottom: 0.9rem; }
+  .meta { color: var(--muted); font-size: 0.875rem !important; }
+  .body .actions { margin-top: auto; padding-top: 0.5rem; }
+
+  .cmd {
+    margin: 0 0 2rem; padding: 1rem 1.25rem; overflow-x: auto; max-width: 40rem;
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  }
+  .cmd code { background: none; padding: 0; font-size: 0.9375rem; color: var(--text); }
+
+  .how { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: 2rem 3rem; margin: 0; }
+  .how dt { font-family: var(--font-mono); font-weight: 600; color: var(--text); margin-bottom: 0.5rem; }
+  .how dd { margin: 0; }
+</style>
