@@ -1,6 +1,6 @@
 ---
 // The web installer's page: what it is, what it does today, and where it
-// runs. A draft: not in the navigation, and kept out of search engines.
+// runs. Linked from /install/ (go-live switch 5), and indexed.
 //
 // Built only with the switch in installer-web.env on (INSTALLER_WEB=on): with
 // it off, as committed, getStaticPaths names no page and /install/web/ does
@@ -17,7 +17,7 @@
 // `connect-src 'self' https:` does) and compile WebAssembly
 // (`'wasm-unsafe-eval'`, sent today). It must not be framed by another origin.
 import Base from "../../layouts/Base.astro";
-import { devices, REPO_URL } from "../../lib/devices";
+import { devices } from "../../lib/devices";
 import { INSTALLER_WEB_ON } from "../../lib/installer-web";
 
 export function getStaticPaths() {
@@ -30,15 +30,15 @@ const APP = "/install/web/app/";
 // (the installer's DEVICES); named here by the device data's title
 const released = ["cheetah"].map((c) => devices.find((d) => d.codename === c)?.title ?? c);
 ---
-<Base title="Install from your browser" description="Omarchy Mobile's installer in a browser tab: it checks your phone, downloads the release and checks its signature, and shows exactly what an install writes." noindex>
+<Base title="Check your phone from your browser" description="Omarchy Mobile's installer in a browser tab: it checks your phone, downloads the release and checks its signature, and shows exactly what an install writes. Installing from the browser is coming.">
   <section class="wrap intro">
-    <h1>Install from your browser</h1>
+    <h1>Check your phone from your browser</h1>
     <p class="lede">
-      Plug your phone in, open the installer, and follow the steps. The page talks to the phone over USB, downloads
-      the latest Omarchy Mobile release and checks it against the release key, and shows you exactly what it will
-      write before anything happens.
+      Plug your phone in, open the page, and follow the steps. The page talks to the phone over USB, downloads
+      the latest Omarchy Mobile release and checks it against the release key, and shows you exactly what an install
+      would write. Today it checks; installing from the browser is coming.
     </p>
-    <p><a class="button primary" href={APP}>Open the installer</a></p>
+    <p><a class="button primary" href={APP}>Check your phone</a></p>
   </section>
 
   <section class="wrap" aria-labelledby="today">
@@ -51,7 +51,8 @@ const released = ["cheetah"].map((c) => devices.find((d) => d.codename === c)?.t
     <p>
       <strong>It doesn't write to the phone yet.</strong> The write path is built and tested against a pretend phone, and
       it comes to this page after an attended run in a real browser on a real phone. Until then, install with the
-      <a href={`${REPO_URL}#quick-start`}>command-line installer</a>.
+      <a href="/install/#start">desktop app</a> (reinstalls) or the
+      <a href="/install/#advanced">command line</a>.
     </p>
     <p>Today it has releases for: {released.join(", ")}.</p>
     <p>
