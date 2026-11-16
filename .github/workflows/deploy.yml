@@ -46,6 +46,32 @@ jobs:
         env:
           OMAMOBILE_REPO: omarchy-mobile
 
+      # The web installer at /install/web/app/, behind the one switch in
+      # installer-web.env (off as committed: this step then fetches nothing
+      # and checks that the draft page was not built). On, it downloads the
+      # pinned installer release's asset and refuses it unless its SHA-256 is
+      # the pinned one (docs/INSTALLER-WEB.md). The server's Permissions-Policy
+      # for that path is set on the server by hand; nothing here changes it.
+      - name: Web installer (installer-web.env)
+        run: |
+          scripts/installer-web.sh status
+          scripts/installer-web.sh fetch dist
+
+      # With the switch on, say so if the server still forbids WebUSB on the
+      # installer's path: the page then loads but cannot reach a phone (it
+      # fails closed). A warning, not a failure: the files may go out first.
+      - name: The server's Permissions-Policy for /install/web/app/
+        run: |
+          if grep -qx 'INSTALLER_WEB=on' installer-web.env; then
+            policy=$(curl -sSI https://omamobile.org/install/web/app/ | tr -d '\r' | grep -i '^permissions-policy:' || true)
+            echo "${policy:-no Permissions-Policy header}"
+            if ! grep -q 'usb=(self)' <<<"$policy"; then
+              echo "::warning::omamobile.org does not send usb=(self) for /install/web/app/ yet: the installer will load but cannot use WebUSB (docs/INSTALLER-WEB.md)"
+            fi
+          else
+            echo "installer-web: off, nothing to check"
+          fi
+
       # Load-bearing switches, as on the server's other sites: --delete mirrors
       # dist/; no -p and --omit-dir-times, because the deploy user writes inside
       # the root:deployers webroot without owning it (otherwise rsync exits 23);
