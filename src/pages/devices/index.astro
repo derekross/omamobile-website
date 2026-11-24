@@ -1,6 +1,6 @@
 ---
 import Base from "../../layouts/Base.astro";
-import { devices, subsystems, wanted, inline, STATUS_TEXT, REPO_URL } from "../../lib/devices";
+import { devices, subsystems, wanted, shared, inline, STATUS_TEXT, REPO_URL } from "../../lib/devices";
 ---
 <Base title="Devices" description="Which phones run Omamobile, what works on each one, and the phones we'd like to support next.">
   <section class="wrap intro">
@@ -45,6 +45,16 @@ import { devices, subsystems, wanted, inline, STATUS_TEXT, REPO_URL } from "../.
     </div>
   </section>
 
+  {shared.items.length > 0 && (
+    <section class="wrap shared" aria-labelledby="shared">
+      <h2 id="shared">Shared hardware</h2>
+      {shared.intro && <p set:html={inline(shared.intro)} />}
+      <ul>
+        {shared.items.map((s) => <li set:html={inline(s)} />)}
+      </ul>
+    </section>
+  )}
+
   <section class="wrap wanted" aria-labelledby="wanted">
     <h2 id="wanted">Wanted</h2>
     <p>
@@ -78,6 +88,11 @@ import { devices, subsystems, wanted, inline, STATUS_TEXT, REPO_URL } from "../.
   .matrix tbody th { font-weight: 500; color: var(--text); position: sticky; left: 0; background: var(--bg); }
   .matrix tbody tr:last-child > * { border-bottom: 0; }
 
+  .shared { padding-top: clamp(3rem, 7vw, 5rem); }
+  .shared h2 { margin-bottom: 1rem; }
+  .shared > p { max-width: 70ch; }
+  .shared ul { margin: 1.5rem 0 0; padding-left: 1.25rem; max-width: 80ch; }
+  .shared li { margin: 0 0 0.75rem; font-size: 0.9375rem; }
   .wanted { padding-top: clamp(3rem, 7vw, 5rem); }
   .wanted h2 { margin-bottom: 1rem; }
   .wanted ul { list-style: none; padding: 0; margin: 2rem 0 0; border-top: 1px solid var(--border); }

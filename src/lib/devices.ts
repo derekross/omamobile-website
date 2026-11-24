@@ -128,13 +128,21 @@ function load() {
     if (dev && t) dev.detail = t.slice(1).map((r) => ({ name: r[0], cell: parseCell(r[1]), notes: r[2] ?? "", plan: r[3] ?? "" }));
   }
 
+  // "Shared hardware": an intro paragraph, then one "- " line per family.
+  const sharedMd = secs.get("Shared hardware") ?? "";
+  const sharedLines = sharedMd.split("\n");
+  const shared = {
+    intro: sharedLines.filter((l) => l.trim() && !l.startsWith("- ") && !l.startsWith("Shared hardware")).join(" ").trim(),
+    items: sharedLines.filter((l) => l.startsWith("- ")).map((l) => l.slice(2).trim()),
+  };
+
   const [w] = tables(secs.get("Wanted") ?? "");
   const wanted: Wanted[] = (w ?? []).slice(1).map((r) => ({ title: plain(r[0]), codename: plain(r[1]), soc: plain(r[2]), start: r[3] }));
 
-  return { devices, subsystems, wanted };
+  return { devices, subsystems, wanted, shared };
 }
 
-export const { devices, subsystems, wanted } = load();
+export const { devices, subsystems, wanted, shared } = load();
 export const reference = devices[0];
 
 // Wanted phones that no port covers yet ("Pixel 8, 8 Pro, 8a" lists three codenames).
