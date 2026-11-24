@@ -1,6 +1,6 @@
 # AGENTS.md: working on omamobile.org
 
-This repository is public, and so is everything the site says. The rules of the main repository's [AGENTS.md](https://github.com/derekross/omarchy-mobile/blob/main/AGENTS.md) apply here as well. These are the rules specific to the site.
+This repository is public, and so is everything the site says. The rules of the main repository's [AGENTS.md](https://github.com/derekross/omamobile/blob/main/AGENTS.md) apply here as well. These are the rules specific to the site.
 
 ## Copy
 

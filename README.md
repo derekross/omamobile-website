@@ -1,6 +1,6 @@
 # omamobile.org
 
-The website for [Omamobile](https://github.com/derekross/omarchy-mobile): native Omarchy on your phone, with a mainline kernel and no Android underneath.
+The website for [Omamobile](https://github.com/derekross/omamobile): native Omarchy on your phone, with a mainline kernel and no Android underneath.
 
 The site will have:
 

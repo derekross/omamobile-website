@@ -3,7 +3,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
-export const REPO_URL = "https://github.com/derekross/omarchy-mobile";
+export const REPO_URL = "https://github.com/derekross/omamobile";
 // The community chat, on Armada (Nostr): the invite link.
 export const COMMUNITY_URL =
   "https://armada.buzz/invite/naddr1qvzqqqyzz5pzpxmj97gnc6pjgd9plgzn6ycgxd9nlf3ntxd0dsx3c80c3smp7u76qqqqsjy3k6#BAHTpXzd0xPNfv2lCHPD5K-g";

@@ -26,7 +26,7 @@ jobs:
       - name: Checkout the main repository's docs
         uses: actions/checkout@v4
         with:
-          repository: derekross/omarchy-mobile
+          repository: derekross/omamobile
           path: omarchy-mobile
           sparse-checkout: docs
 

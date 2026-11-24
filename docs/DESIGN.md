@@ -5,7 +5,7 @@ Status (2026-10-26): the landing page, devices and news are live at omamobile.or
 ## Stack
 
 - **Astro, static output.** Omarchy's own site uses Astro, and it lets the content collections load the main repository's Markdown directly. The site ships no client JavaScript except the theme switcher and, later, the installer.
-- **Content comes from the main repository.** The build reads a pinned checkout of `derekross/omarchy-mobile`: `docs/DEVICES.md` becomes validated device data, and the docs pages come from its Markdown. Every status on the site therefore matches the repository, and a status the data contradicts fails the build.
+- **Content comes from the main repository.** The build reads a pinned checkout of `derekross/omamobile`: `docs/DEVICES.md` becomes validated device data, and the docs pages come from its Markdown. Every status on the site therefore matches the repository, and a status the data contradicts fails the build.
 - **Hosting:** nginx with Let's Encrypt on the maintainer's VPS. GitHub Actions builds and rsyncs `dist/` on every push to `main` and every six hours.
 
 ## Look
