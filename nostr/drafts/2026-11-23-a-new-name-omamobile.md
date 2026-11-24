@@ -4,7 +4,7 @@ d: 2026-11-23-a-new-name-omamobile
 title: "A new name: Omamobile"
 summary: "The project is now called Omamobile, to make clear it is an independent community project. Nothing changes on installed phones, and the site stays at omamobile.org."
 t: [omamobile, omarchy, linux, mobilelinux, arch, hyprland, pixel]
-status: draft, not published
+status: published 2026-11-23 (nostr/events/2026-11-23-a-new-name-omamobile.json)
 ---
 
 The project has a new name: Omamobile.

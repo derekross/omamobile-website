@@ -1,4 +1,4 @@
-# Proposed kind 0 profile for the project's Nostr account (not signed, not published)
+# Kind 0 profile for the project's Nostr account (published 2026-11-23, event d39cea72b655…)
 
 Only `display_name` and `about` change. Everything else stays as it is in the current
 profile (`name` "omamobile", `picture`, `website` https://omamobile.org,
@@ -21,3 +21,7 @@ Native Omarchy on your phone: Arch Linux ARM, Hyprland and Omarchy's apps on a m
 
 https://github.com/derekross/omarchy-mobile
 ```
+
+Published 2026-11-23 with the new banner, nostr/art/banner.png, at
+https://blossom.ditto.pub/5aabfbd2c82ec63c023ad13e07476f1961e67f4b79bb5f6cbccf29e7b37a94bd.png
+(relay.ditto.pub, relay.primal.net, nos.lol; relay.damus.io was answering 503).
