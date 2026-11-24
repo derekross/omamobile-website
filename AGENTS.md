@@ -7,7 +7,7 @@ This repository is public, and so is everything the site says. The rules of the 
 - **Lead with the goal:** native Omarchy as your phone. Don't put caveats in headlines or on the landing page. Status belongs on the device pages.
 - **Never claim a feature works before it is verified on hardware.** Device status comes from the main repository's `docs/DEVICES.md`. Never hand-copy it into copy.
 - **Don't name or compare other mobile Linux projects or operating systems in public copy.** If a comparison seems needed, ask the maintainer first.
-- **Omarchy Mobile is a community project built on Omarchy.** Never present it as an official Omarchy or Basecamp product.
+- **Omamobile is an independent community project built on Omarchy.** Never present it as an official Omarchy or Basecamp product.
 - Name contributors by their GitHub handle.
 
 ## Data and assets

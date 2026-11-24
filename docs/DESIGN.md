@@ -14,7 +14,7 @@ Status (2026-10-26): the landing page, devices and news are live at omamobile.or
 - **Omarchy's type:** JetBrains Mono for headings, navigation and status; Geist for body text (both OFL, self-hosted through Fontsource).
 - **One bold element:** a real screenshot of the phone in the hero. Everything else is quiet: ruled lists, not cards; left-aligned.
 - **Status colours mean status:** green works, yellow partial or testing, violet in progress, a hollow dot not yet.
-- Omarchy's look: its themes, fonts and logo files, with attribution. Omarchy is MIT, so reusing its code and assets is covered. MIT grants no trademark rights, so the site says "Omarchy Mobile is a community project built on Omarchy", links back, and never presents itself as an official Basecamp product.
+- Omarchy's look: its themes, fonts and logo files, with attribution. Omarchy is MIT, so reusing its code and assets is covered. MIT grants no trademark rights, so the site says "Omamobile is an independent community project built on Omarchy", links back, and never presents itself as an official Basecamp product.
 - Real screenshots and photos from the phones, each scrubbed for identifiers: SSIDs, Bluetooth device names, notification contents, account names and serial numbers.
 
 ## News

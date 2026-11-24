@@ -16,7 +16,7 @@ const {
   noindex = false,
   description = "Native Omarchy on your phone: Arch Linux, Hyprland and Omarchy's apps on a mainline Linux kernel, with no Android underneath.",
 } = Astro.props;
-const fullTitle = title ? `${title} · Omarchy Mobile` : "Omarchy Mobile";
+const fullTitle = title ? `${title} · Omamobile` : "Omamobile";
 const path = Astro.url.pathname.replace(/\/$/, "") || "/";
 const nav = [
   { href: "/devices", label: "Devices" },
@@ -54,7 +54,7 @@ const themeName = (t: string) => t.split("-").map((w) => w[0].toUpperCase() + w.
     <a class="skip" href="#main">Skip to content</a>
     <header class="site-header">
       <div class="wrap bar">
-        <a class="wordmark" href="/" aria-label="Omarchy Mobile, home"><span class="mark" aria-hidden="true">om</span>omarchy<span class="sub">mobile</span></a>
+        <a class="wordmark" href="/" aria-label="Omamobile, home"><span class="mark" aria-hidden="true">om</span>oma<span class="sub">mobile</span></a>
         <nav aria-label="Main">
           <ul>
             {nav.map((n) => (
@@ -70,8 +70,8 @@ const themeName = (t: string) => t.split("-").map((w) => w[0].toUpperCase() + w.
     <footer class="site-footer">
       <div class="wrap foot">
         <p>
-          Omarchy Mobile is a community project built on <a href="https://omarchy.org">Omarchy</a>.
-          It isn't an official Omarchy or Basecamp product. Code and site are MIT licensed,
+          Omamobile is an independent community project built on <a href="https://omarchy.org">Omarchy</a>,
+          not an official Omarchy project. Code and site are MIT licensed,
           on <a href={REPO_URL}>GitHub</a>.<br />
           Nostr: <a href="https://njump.me/npub1epdgm26q2wx0ee37q8u692z8w2ngwqepd9fvxy04uml8nz7sx7fs9hkynf">@omamobile.org</a>
           · Chat: <a href={COMMUNITY_URL}>the community on Armada</a>
@@ -103,7 +103,7 @@ const themeName = (t: string) => t.split("-").map((w) => w[0].toUpperCase() + w.
     color: var(--text); text-decoration: none;
   }
   .wordmark { display: inline-flex; align-items: center; }
-  .wordmark .sub { color: var(--accent); margin-left: 0.4ch; font-weight: 500; }
+  .wordmark .sub { color: var(--accent); font-weight: 500; }
   /* The logo: a phone outline around "om", as on the project's Nostr profile. */
   .mark {
     display: inline-grid; place-items: center; position: relative;

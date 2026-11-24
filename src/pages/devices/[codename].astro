@@ -9,7 +9,7 @@ const { device } = Astro.props as { device: Device };
 const rows = device.detail ?? subsystems.map((s) => ({ name: s, cell: device.cells[s], notes: "", plan: "" }));
 const counts = rows.reduce<Record<string, number>>((n, r) => ((n[r.cell.status] = (n[r.cell.status] ?? 0) + 1), n), {});
 ---
-<Base title={device.title} description={`What works on the ${device.title} (${device.codename}) with Omarchy Mobile.`}>
+<Base title={device.title} description={`What works on the ${device.title} (${device.codename}) with Omamobile.`}>
   <section class="wrap intro">
     <p class="crumb"><a href="/devices">Devices</a></p>
     <h1>{device.title}</h1>
@@ -35,7 +35,7 @@ const counts = rows.reduce<Record<string, number>>((n, r) => ((n[r.cell.status] 
       ))}
     </ul>
     <p class="source">
-      Source: <a href={`${REPO_URL}/blob/main/docs/DEVICES.md`}>docs/DEVICES.md</a> in the Omarchy Mobile repository.
+      Source: <a href={`${REPO_URL}/blob/main/docs/DEVICES.md`}>docs/DEVICES.md</a> in the Omamobile repository.
     </p>
   </section>
 </Base>

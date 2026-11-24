@@ -5,7 +5,7 @@ import { getCollection } from "astro:content";
 const posts = (await getCollection("news")).sort((a, b) => +b.data.published - +a.data.published);
 const day = (d: Date) => d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
 ---
-<Base title="News" description="Omarchy Mobile project news.">
+<Base title="News" description="Omamobile project news.">
   <section class="wrap intro">
     <h1>News</h1>
     <p>Updates from the project, also posted on Nostr as <a href="https://njump.me/npub1epdgm26q2wx0ee37q8u692z8w2ngwqepd9fvxy04uml8nz7sx7fs9hkynf">@omamobile.org</a>.</p>

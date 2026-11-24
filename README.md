@@ -1,6 +1,6 @@
 # omamobile.org
 
-The website for [Omarchy Mobile](https://github.com/derekross/omarchy-mobile): native Omarchy on your phone, with a mainline kernel and no Android underneath.
+The website for [Omamobile](https://github.com/derekross/omarchy-mobile): native Omarchy on your phone, with a mainline kernel and no Android underneath.
 
 The site will have:
 
@@ -31,4 +31,4 @@ The repository is public, and so is everything the site says. Read [AGENTS.md](A
 
 ## Licence
 
-MIT, as for the main repository. Omarchy Mobile is a community project built on [Omarchy](https://github.com/basecamp/omarchy) (MIT). It is not an official Omarchy or Basecamp product.
+MIT, as for the main repository. Omamobile is an independent community project built on [Omarchy](https://github.com/basecamp/omarchy) (MIT). It is not an official Omarchy or Basecamp product.
