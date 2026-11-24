@@ -3,7 +3,7 @@ import "@fontsource-variable/jetbrains-mono";
 import "@fontsource-variable/geist";
 import "../styles/global.css";
 import themes from "../lib/themes.json";
-import { COMMUNITY_URL, REPO_URL } from "../lib/devices";
+import { REPO_URL } from "../lib/devices";
 
 interface Props {
   title?: string;
@@ -22,7 +22,7 @@ const nav = [
   { href: "/devices", label: "Devices" },
   { href: `${REPO_URL}#quick-start`, label: "Install" },
   { href: "/news", label: "News" },
-  { href: COMMUNITY_URL, label: "Community" },
+  { label: "Community", soon: true },
   { href: REPO_URL, label: "GitHub" },
 ];
 const themeName = (t: string) => t.split("-").map((w) => w[0].toUpperCase() + w.slice(1)).join(" ");
@@ -58,7 +58,9 @@ const themeName = (t: string) => t.split("-").map((w) => w[0].toUpperCase() + w.
         <nav aria-label="Main">
           <ul>
             {nav.map((n) => (
-              <li><a href={n.href} aria-current={path === n.href ? "page" : undefined}>{n.label}</a></li>
+              <li>{n.soon
+                ? <span class="nav-soon">{n.label} <small>soon</small></span>
+                : <a href={n.href} aria-current={path === n.href ? "page" : undefined}>{n.label}</a>}</li>
             ))}
           </ul>
         </nav>
@@ -74,7 +76,7 @@ const themeName = (t: string) => t.split("-").map((w) => w[0].toUpperCase() + w.
           not an official Omarchy project. Code and site are MIT licensed,
           on <a href={REPO_URL}>GitHub</a>.<br />
           Nostr: <a href="https://njump.me/npub1epdgm26q2wx0ee37q8u692z8w2ngwqepd9fvxy04uml8nz7sx7fs9hkynf">@omamobile.org</a>
-          · Chat: <a href={COMMUNITY_URL}>the community on Armada</a>
+          · Chat: coming soon
         </p>
         <label class="theme">
           <span>Theme</span>
@@ -117,6 +119,8 @@ const themeName = (t: string) => t.split("-").map((w) => w[0].toUpperCase() + w.
   }
   nav ul { list-style: none; display: flex; gap: clamp(0.75rem, 3vw, 1.75rem); margin: 0; padding: 0; flex-wrap: wrap; }
   nav a { font-family: var(--font-mono); font-size: 0.9375rem; color: var(--text-2); text-decoration: none; }
+  .nav-soon { font-family: var(--font-mono); font-size: 0.9375rem; color: var(--text-3, var(--text-2)); opacity: 0.7; cursor: default; }
+  .nav-soon small { font-size: 0.7rem; }
   nav a:hover, nav a[aria-current="page"] { color: var(--text); text-decoration: underline; text-decoration-color: var(--accent); }
 
   .site-footer { border-top: 1px solid var(--border); margin-top: 6rem; font-size: 0.875rem; color: var(--muted); }
